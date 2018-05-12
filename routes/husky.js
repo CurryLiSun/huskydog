@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
 
 // POST method route
 router.post('/', function (req, res) {
-    res.send('POST request to the homepage');
+    res.send('This is post function!');
 });
 
 module.exports = router;

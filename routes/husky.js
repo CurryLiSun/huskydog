@@ -8,6 +8,7 @@ router.get('/', function (req, res, next) {
 
 // POST method route
 router.post('/', function (req, res) {
+    console.log(req);
     res.send('This is post function!');
 });
 

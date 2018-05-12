@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 
 // Signature validation
+const crypto = require('crypto');
 const channelSecret = "6fef8cd1c18dc2db6786c887b613652f"; // Channel secret string
-const body;  // Request body string
-const signature = crypto
-  .createHmac('SHA256', channelSecret)
-  .update(body).digest('base64');
+let body;  // Request body string
+// const signature = crypto.createHmac('SHA256', channelSecret).update(body).digest('base64');
+
 // Compare X-Line-Signature request header and the signature
 
 /* GET users listing. */

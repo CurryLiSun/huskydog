@@ -4,11 +4,14 @@ var router = express.Router();
 // Signature validation
 const crypto = require('crypto');
 const channelSecret = "6fef8cd1c18dc2db6786c887b613652f"; // Channel secret string
-let body;  // Request body string
-//const signature = crypto.createHmac('SHA256', channelSecret).update(body).digest('base64');
-// const signature = crypto.createHmac('SHA256', channelSecret).update(body).digest('base64');
+const channelToken = "5lWQJsH5FrqDqArB6vgBS5wuZqyfhR4Uqfr1vJT57bxKRxOrSs1F72J5sEKiKBwq+oHIO0dExRsy7hi6E0k1pPlO0Nvi9WTjZD32j4T+k1iohERZWZE+en72+aeg0DixqLTHbTQQVIz7DCAzA+9u3wdB04t89/1O/w1cDnyilFU="; //Channel secret string
 
-// Compare X-Line-Signature request header and the signature
+// set reply message setting
+const line = require('@line/bot-sdk');
+
+const client = new line.Client({
+    channelAccessToken: channelToken
+});
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -24,6 +27,20 @@ router.post('/', function (req, res) {
     console.log(req.body);
     console.log(replyToken);
     console.log(reqMsg);
+    //response the same word in requset
+    let message = {
+        type: 'text',
+        text: reqMsg
+    };
+    
+    client.replyMessage(replyToken, message)
+        .then(() => {
+        
+        })
+        .catch((err) => {
+        // error handling
+        });
+    
     res.send(req.body);
 });
 

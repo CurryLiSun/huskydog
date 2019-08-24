@@ -18,7 +18,9 @@ router.get('/', function (req, res, next) {
 // POST method route
 router.post('/', function (req, res) {
     // console.log(req);
+    let replyToken = req.body.events.replyToken;
     console.log(req.body);
+    console.log(req.body.events.message);
     res.send(req.body);
 });
 

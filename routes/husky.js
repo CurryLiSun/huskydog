@@ -36,8 +36,8 @@ router.post('/', function (req, res) {
     
     client.replyMessage(replyToken, message)
         .then(() => {
-            console.log("replyMessage running in then.");
-            res.send("reply OK");
+            console.log("replyMessage success");
+            res.sendStatus(200);
         })
         .catch((err) => {
         // error handling

@@ -17,10 +17,13 @@ router.get('/', function (req, res, next) {
 
 // POST method route
 router.post('/', function (req, res) {
-    // console.log(req);
-    let replyToken = req.body.replyToken;
+    // get requset item
+    let replyToken = req.body.events[0].replyToken;
+    let reqMsg = req.body.events[0].message;
+
     console.log(req.body);
-    console.log(req.body.message);
+    console.log(replyToken);
+    console.log(reqMsg);
     res.send(req.body);
 });
 

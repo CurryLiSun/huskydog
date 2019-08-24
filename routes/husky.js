@@ -35,13 +35,14 @@ router.post('/', function (req, res) {
     
     client.replyMessage(replyToken, message)
         .then(() => {
-        
+            console.log("replyMessage running in then.");
         })
         .catch((err) => {
         // error handling
+            console.log(err);
         });
     
-    res.send(req.body);
+    //res.send(req.body);
 });
 
 module.exports = router;

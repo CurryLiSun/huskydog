@@ -5,7 +5,7 @@ var router = express.Router();
 const crypto = require('crypto');
 const channelSecret = "6fef8cd1c18dc2db6786c887b613652f"; // Channel secret string
 let body;  // Request body string
-const signature = crypto.createHmac('SHA256', channelSecret).update(body).digest('base64');
+//const signature = crypto.createHmac('SHA256', channelSecret).update(body).digest('base64');
 // const signature = crypto.createHmac('SHA256', channelSecret).update(body).digest('base64');
 
 // Compare X-Line-Signature request header and the signature
@@ -18,7 +18,7 @@ router.get('/', function (req, res, next) {
 // POST method route
 router.post('/', function (req, res) {
     // console.log(req);
-    res.send('This is post function!');
+    res.send(req.body);
 });
 
 module.exports = router;

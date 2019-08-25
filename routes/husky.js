@@ -76,10 +76,9 @@ router.post('/', function (req, res) {
 
 function BotJoin(res, replyToken, replySource){
     //greeting word
-    //response the same word in requset
     let message = {
         type: 'text',
-        text: "汪汪汪汪汪汪汪(真開心又可以對一群人說話了)!"
+        text: "汪汪汪汪汪汪汪 \n(真開心又可以對一群人說話了)!"
     };
 
     client.pushMessage(replySource.groupId, message)
@@ -92,11 +91,26 @@ function BotJoin(res, replyToken, replySource){
             //console.log(err);
             res.send(err);
         }); 
-    console.log("BotJoin End!");
 }
 
 function BotLeave(){
     //clear db data
+    //leave word
+    let message = {
+        type: 'text',
+        text: "汪汪汪汪汪 \n(掰掰嗚嗚)!"
+    };
+
+    client.pushMessage(replySource.groupId, message)
+        .then(() => {
+            console.log("replyMessage success");
+            res.sendStatus(200);
+        })
+        .catch((err) => {
+        // error handling
+            //console.log(err);
+            res.send(err);
+        }); 
 }
 
 module.exports = router;

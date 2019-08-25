@@ -20,6 +20,11 @@ router.get('/', function (req, res, next) {
 });
 
 // POST method route
+router.post('/testpost', function (req, res) {
+    res.send(req);
+});
+
+// POST method route
 router.post('/', function (req, res) {
     // get requset item
     let replyToken = req.body.events[0].replyToken;
@@ -78,7 +83,7 @@ function BotJoin(res, replyToken, replySource){
     //greeting word
     let message = {
         type: 'text',
-        text: "汪汪汪汪汪汪汪 \n(真開心又可以對一群人說話了)!"
+        text: "汪汪汪汪汪汪汪!! \n(真開心又可以對一群人說話了)"
     };
 
     client.pushMessage(replySource.groupId, message)
@@ -95,22 +100,6 @@ function BotJoin(res, replyToken, replySource){
 
 function BotLeave(){
     //clear db data
-    //leave word
-    let message = {
-        type: 'text',
-        text: "汪汪汪汪汪 \n(掰掰嗚嗚)!"
-    };
-
-    client.pushMessage(replySource.groupId, message)
-        .then(() => {
-            console.log("replyMessage success");
-            res.sendStatus(200);
-        })
-        .catch((err) => {
-        // error handling
-            //console.log(err);
-            res.send(err);
-        }); 
 }
 
 module.exports = router;

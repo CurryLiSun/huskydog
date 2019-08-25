@@ -33,9 +33,9 @@ router.post('/', function (req, res) {
     let reqMsg = req.body.events[0].message;
 
     //log reqest item
-    console.log("replySource",replySource);
-    console.log("replyType",replyType);
-    console.log("reqMsg",reqMsg);
+    console.log("---replySource---",replySource);
+    //console.log("---replyType---",replyType);
+    console.log("---reqMsg---",reqMsg);
     // console.log(replyToken);
     // console.log(reqMsg.text);
 
@@ -73,7 +73,7 @@ function BotReplyMsg(res, replyToken, reqMsg){
         break;
         case "image":
             message.type = "text";
-            message.text = "汪汪汪汪汪! \n(幹嘛貼這種圖)";
+            message.text = "汪汪汪汪汪! \n(幹嘛貼這種圖給我看)";
         break;
     
         default:

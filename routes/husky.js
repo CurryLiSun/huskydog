@@ -69,11 +69,11 @@ function BotReplyMsg(res, replyToken, reqMsg){
     switch (reqMsg.type) {
         case "sticker":
             message.type = "text";
-            message.text = "汪汪汪汪汪! \n (就別使用貼圖R)";
+            message.text = "汪汪汪汪汪! \n(就別使用貼圖R)";
         break;
         case "image":
             message.type = "text";
-            message.text = "汪汪汪汪汪! \n (幹嘛貼這種圖)";
+            message.text = "汪汪汪汪汪! \n(幹嘛貼這種圖)";
         break;
     
         default:

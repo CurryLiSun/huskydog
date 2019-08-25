@@ -69,6 +69,7 @@ function BotReplyMsg(res, replyToken, reqMsg){
     switch (reqMsg.type) {
         case "sticker":
             message = {
+                id: reqMsg.id,
                 type: "sticker",
                 stickerId: reqMsg.stickerId,
                 packageId: reqMsg.packageId

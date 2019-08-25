@@ -71,8 +71,8 @@ function BotReplyMsg(res, replyToken, reqMsg){
             message = {
                 id: reqMsg.id,
                 type: "sticker",
-                stickerId: reqMsg.stickerId,
-                packageId: reqMsg.packageId
+                stickerId: "51626520",
+                packageId: "11538"
             }
         break;
         case "image":

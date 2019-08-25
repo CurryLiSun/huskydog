@@ -65,20 +65,27 @@ router.post('/', function (req, res) {
 });
 
 function BotReplyMsg(res, replyToken, reqMsg){
-    let message = {};
+    let message;
     switch (reqMsg.type) {
         case "sticker":
-            message.type = "text";
-            message.text = "汪汪汪汪汪! \n(就別使用貼圖R)";
+            message = {
+                type: "sticker",
+                stickerId: reqMsg.stickerId,
+                packageId: reqMsg.packageId
+            }
         break;
         case "image":
-            message.type = "text";
-            message.text = "汪汪汪汪汪! \n(幹嘛貼這種圖給我看)";
+            message = {
+                type: 'text',
+                text: "汪汪汪汪汪! \n(幹嘛貼這種圖給我看)"
+            };
         break;
-    
+
         default:
-            message.type = "text";
-            message.text = reqMsg.text;
+            message = {
+                type: 'text',
+                text: reqMsg.text
+            };
         break;
     }
 

@@ -23,20 +23,65 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res) {
     // get requset item
     let replyToken = req.body.events[0].replyToken;
+    let replyType = req.body.events[0].type;
+    let replySource = req.body.events[0].source;
     let reqMsg = req.body.events[0].message;
 
     //log reqest item
     console.log(req.body);
+    console.log(reqMsg);
     // console.log(replyToken);
     // console.log(reqMsg.text);
+
+    switch (replyType) {
+        case "follow":
+
+        break;
+
+        case "unfollow":
+
+        break;
+
+        case "join":
+            BotJoin(replyToken, replySource);
+        break;
+        
+        case "leave":
+
+        break;
     
+        default:
+            //response the same word in requset
+            let message = {
+                type: 'text',
+                text: reqMsg.text
+            };
+
+            client.replyMessage(replyToken, message)
+                .then(() => {
+                    console.log("replyMessage success");
+                    res.sendStatus(200);
+                })
+                .catch((err) => {
+                // error handling
+                    //console.log(err);
+                    res.send(err);
+                }); 
+        break;
+    }
+
+    res.sendStatus(200);
+});
+
+function BotJoin(replyToken, replySource){
+    //greeting word
     //response the same word in requset
     let message = {
         type: 'text',
-        text: reqMsg.text
+        text: "汪汪汪汪汪汪汪(真開心又可以對一群人說話了)!"
     };
-    
-    client.replyMessage(replyToken, message)
+
+    client.replyMessage(replySource.groupId, message)
         .then(() => {
             console.log("replyMessage success");
             res.sendStatus(200);
@@ -45,7 +90,11 @@ router.post('/', function (req, res) {
         // error handling
             //console.log(err);
             res.send(err);
-        });    
-});
+        }); 
+}
+
+function BotLeave(){
+    //clear db data
+}
 
 module.exports = router;

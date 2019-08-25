@@ -21,7 +21,7 @@ router.get('/', function (req, res, next) {
 
 // POST method route
 router.post('/testpost', function (req, res) {
-    res.send(req);
+    res.send(req.body);
 });
 
 // POST method route
@@ -33,9 +33,9 @@ router.post('/', function (req, res) {
     let reqMsg = req.body.events[0].message;
 
     //log reqest item
-    console.log(req.body);
-    console.log(replyType);
-    console.log(reqMsg);
+    console.log("replySource",replySource);
+    console.log("replyType",replyType);
+    console.log("reqMsg",reqMsg);
     // console.log(replyToken);
     // console.log(reqMsg.text);
 
@@ -57,27 +57,42 @@ router.post('/', function (req, res) {
         break;
     
         default:
-            //response the same word in requset
-            let message = {
-                type: 'text',
-                text: reqMsg.text
-            };
-
-            client.replyMessage(replyToken, message)
-                .then(() => {
-                    console.log("replyMessage success");
-                    res.sendStatus(200);
-                })
-                .catch((err) => {
-                // error handling
-                    //console.log(err);
-                    res.send(err);
-                }); 
+            BotReplyMsg(res, replyToken, reqMsg);
         break;
     }
 
     //res.sendStatus(200);
 });
+
+function BotReplyMsg(res, replyToken, reqMsg){
+    let message = {};
+    switch (reqMsg.type) {
+        case "sticker":
+            message.type = "text";
+            message.text = "汪汪汪汪汪! \n (就別使用貼圖R)";
+        break;
+        case "image":
+            message.type = "text";
+            message.text = "汪汪汪汪汪! \n (幹嘛貼這種圖)";
+        break;
+    
+        default:
+            message.type = "text";
+            message.text = reqMsg.text;
+        break;
+    }
+
+    client.replyMessage(replyToken, message)
+        .then(() => {
+            //console.log("replyMessage success");
+            res.sendStatus(200);
+        })
+        .catch((err) => {
+        // error handling
+            //console.log(err);
+            res.send(err);
+        }); 
+}
 
 function BotJoin(res, replyToken, replySource){
     //greeting word
@@ -88,7 +103,7 @@ function BotJoin(res, replyToken, replySource){
 
     client.pushMessage(replySource.groupId, message)
         .then(() => {
-            console.log("replyMessage success");
+            //console.log("pushMessage success");
             res.sendStatus(200);
         })
         .catch((err) => {

@@ -81,7 +81,7 @@ function BotJoin(replyToken, replySource){
         text: "汪汪汪汪汪汪汪(真開心又可以對一群人說話了)!"
     };
 
-    client.replyMessage(replySource.groupId, message)
+    client.pushMessage(replySource.groupId, message)
         .then(() => {
             console.log("replyMessage success");
             res.sendStatus(200);

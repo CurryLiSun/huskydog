@@ -37,7 +37,6 @@ router.post('/', function (req, res) {
     //console.log("---replyType---",replyType);
     console.log("---reqMsg---",reqMsg);
     // console.log(replyToken);
-    // console.log(reqMsg.text);
 
     switch (replyType) {
         case "follow":

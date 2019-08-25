@@ -25,9 +25,11 @@ router.post('/', function (req, res) {
     let replyToken = req.body.events[0].replyToken;
     let reqMsg = req.body.events[0].message;
 
-    //console.log(req.body);
-    console.log(replyToken);
-    console.log(reqMsg.text);
+    //log reqest item
+    console.log(req.body);
+    // console.log(replyToken);
+    // console.log(reqMsg.text);
+    
     //response the same word in requset
     let message = {
         type: 'text',

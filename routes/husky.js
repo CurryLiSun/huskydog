@@ -29,6 +29,7 @@ router.post('/', function (req, res) {
 
     //log reqest item
     console.log(req.body);
+    console.log(replyType);
     console.log(reqMsg);
     // console.log(replyToken);
     // console.log(reqMsg.text);
@@ -43,7 +44,7 @@ router.post('/', function (req, res) {
         break;
 
         case "join":
-            BotJoin(replyToken, replySource);
+            BotJoin(res, replyToken, replySource);
         break;
         
         case "leave":
@@ -70,10 +71,10 @@ router.post('/', function (req, res) {
         break;
     }
 
-    res.sendStatus(200);
+    //res.sendStatus(200);
 });
 
-function BotJoin(replyToken, replySource){
+function BotJoin(res, replyToken, replySource){
     //greeting word
     //response the same word in requset
     let message = {
@@ -91,6 +92,7 @@ function BotJoin(replyToken, replySource){
             //console.log(err);
             res.send(err);
         }); 
+    console.log("BotJoin End!");
 }
 
 function BotLeave(){

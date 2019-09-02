@@ -9,6 +9,16 @@ const channelToken = "LJb2VigkfYE0/+WZAfxLAEwPdC9hmqvMK9jPkT7RahK5/Mc9lyxqRlGF4C
 // set reply message setting
 const line = require('@line/bot-sdk');
 
+//set scraping setting
+const axios = require('axios');
+const cheerio = require("cheerio");
+const siteUrl = "https://remoteok.io/";
+const fetchData = async () => {
+    const result = await axios.get(siteUrl);
+    return cheerio.load(result.data);
+};
+//const $ = await fetchData();
+
 const client = new line.Client({
     channelSecret: channelSecret,
     channelAccessToken: channelToken
@@ -21,6 +31,12 @@ router.get('/', function (req, res, next) {
 
 // POST method route
 router.post('/testpost', function (req, res) {
+    //test scraping
+    
+    //const postJobButton = $('.top > .action-post-job').text();
+    //console.log(postJobButton) // Logs 'Post a Job'
+
+    //標籤三種:1.衛星 2.雷達 3.雨量
     res.send(req.body);
 });
 

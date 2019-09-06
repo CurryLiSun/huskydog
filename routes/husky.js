@@ -12,13 +12,44 @@ const line = require('@line/bot-sdk');
 //set scraping setting
 const axios = require('axios');
 const cheerio = require("cheerio");
-const siteUrl = "https://remoteok.io/";
-const fetchData = async () => {
-    const result = await axios.get(siteUrl);
+// const siteUrl = "https://remoteok.io/";
+let siteUrl = "https://www.cwb.gov.tw/V8/C/";
+const fetchData = async (customerUrl) => {
+    // console.log(customerUrl);
+    // console.log(siteUrl+customerUrl);
+    const result = await axios.get(siteUrl+customerUrl);
     return cheerio.load(result.data);
 };
-//const $ = await fetchData();
 
+async function getReslut(select_page){
+    let customerUrl = "";
+    let selector = ".zoomHolder  > img";
+    console.log(select_page);
+    //接收應讀取的項目
+    switch (select_page) {
+        case "衛星":
+            customerUrl="W/OBS_Sat.html";
+        break;
+        case "雷達":
+            customerUrl="W/OBS_Radar.html";
+        break;
+        case "雨量":
+            customerUrl="P/Rainfall/Rainfall_QZJ.html";
+            selector = "[role=tabpanel] > img";
+        break;
+        default:
+            break;
+    }
+
+    let $ = await fetchData(customerUrl);
+    // siteName = $('.top > .action-post-job').text();
+    cwbImg = $(selector).attr('src');
+    // console.log("https://www.cwb.gov.tw"+cwbImg);
+
+    return "https://www.cwb.gov.tw"+cwbImg;
+}
+
+//set line bot client
 const client = new line.Client({
     channelSecret: channelSecret,
     channelAccessToken: channelToken
@@ -30,11 +61,11 @@ router.get('/', function (req, res, next) {
 });
 
 // POST method route
-router.post('/testpost', function (req, res) {
-    //test scraping
-    
-    //const postJobButton = $('.top > .action-post-job').text();
-    //console.log(postJobButton) // Logs 'Post a Job'
+router.post('/testpost', async function (req, res) {
+    //replyUrl = await getReslut(req.body.test);
+    let spiltStr = req.body.test.split(";");
+    console.log(spiltStr);
+    console.log(spiltStr[0]);
 
     //標籤三種:1.衛星 2.雷達 3.雨量
     res.send(req.body);
@@ -79,7 +110,7 @@ router.post('/', function (req, res) {
     //res.sendStatus(200);
 });
 
-function BotReplyMsg(res, replyToken, reqMsg){
+async function BotReplyMsg(res, replyToken, reqMsg){
     let message;
     switch (reqMsg.type) {
         case "sticker":
@@ -103,6 +134,17 @@ function BotReplyMsg(res, replyToken, reqMsg){
                 text: reqMsg.text
             };
         break;
+    }
+
+    if (reqMsg.text !== null) {
+        let spiltStr = reqMsg.text.split(";");
+        let replyImgUrl = await getReslut(spiltStr[0]);
+        
+        message = {
+            type: "image",
+            originalContentUrl: replyImgUrl,
+            previewImageUrl: replyImgUrl
+        };
     }
 
     client.replyMessage(replyToken, message)

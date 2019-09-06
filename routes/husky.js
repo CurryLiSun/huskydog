@@ -23,7 +23,7 @@ async function fetchData(customerUrl){
 }
 
 async function getReslut(select_page){
-    let customerUrl = "";
+    let customerUrl = new Set();
     let selector = ".zoomHolder  > img";
     console.log("---getResult---",select_page);
     //接收應讀取的項目
@@ -44,10 +44,10 @@ async function getReslut(select_page){
             return null;
         break;
     }
-
+    
     let $ = await fetchData(customerUrl);
     // siteName = $('.top > .action-post-job').text();
-    console.log("---get back $---",$);
+    // console.log("---get back $---",$);
 
     return customerUrl;
 }

@@ -13,11 +13,11 @@ const line = require('@line/bot-sdk');
 const axios = require('axios');
 const cheerio = require("cheerio");
 // const siteUrl = "https://remoteok.io/";
-let siteUrl = "https://www.cwb.gov.tw/V8/C/";
+// let siteUrl = "https://www.cwb.gov.tw/V8/C/";
 async function fetchData(customerUrl){
     // console.log(customerUrl);
     // console.log(siteUrl+customerUrl);
-    const result = await axios.get(siteUrl+customerUrl);
+    const result = await axios.get(customerUrl);
     return cheerio.load(result.data);
 }
 
@@ -44,12 +44,12 @@ async function getReslut(select_page){
         break;
     }
 
-    //let $ = await fetchData(customerUrl);
+    let $ = await fetchData("https://www.cwb.gov.tw"+customerUrl);
     // siteName = $('.top > .action-post-job').text();
-    //cwbImg = $(selector).attr('src');
+    cwbImg = $("img").attr('src');
     console.log("https://www.cwb.gov.tw"+customerUrl);
 
-    return "https://www.cwb.gov.tw"+customerUrl;
+    return cwbImg;
 }
 
 //set line bot client

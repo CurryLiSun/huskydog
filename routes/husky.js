@@ -14,12 +14,12 @@ const axios = require('axios');
 const cheerio = require("cheerio");
 // const siteUrl = "https://remoteok.io/";
 let siteUrl = "https://www.cwb.gov.tw/V8/C/";
-const fetchData = async (customerUrl) => {
+async function fetchData(customerUrl){
     // console.log(customerUrl);
     // console.log(siteUrl+customerUrl);
     const result = await axios.get(siteUrl+customerUrl);
     return cheerio.load(result.data);
-};
+}
 
 async function getReslut(select_page){
     let customerUrl = "";

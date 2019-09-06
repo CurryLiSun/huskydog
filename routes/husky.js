@@ -49,9 +49,7 @@ async function getReslut(select_page){
     // siteName = $('.top > .action-post-job').text();
     console.log("---get back $---",$);
 
-    let result = await axios.get(customerUrl);
-
-    return result;
+    return customerUrl;
 }
 
 //set line bot client

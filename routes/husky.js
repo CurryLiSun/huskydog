@@ -44,10 +44,10 @@ async function getReslut(select_page){
         break;
     }
 
-    let $ = await fetchData(customerUrl);
+    //let $ = await fetchData(customerUrl);
     // siteName = $('.top > .action-post-job').text();
-    cwbImg = $(selector).attr('src');
-    console.log("https://www.cwb.gov.tw"+cwbImg);
+    //cwbImg = $(selector).attr('src');
+    console.log("https://www.cwb.gov.tw"+customerUrl);
 
     return "https://www.cwb.gov.tw"+customerUrl;
 }

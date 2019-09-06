@@ -115,6 +115,7 @@ async function BotReplyMsg(res, replyToken, reqMsg){
     let message;
     switch (reqMsg.type) {
         case "sticker":
+            return null;
             message = {
                 id: reqMsg.id,
                 type: "sticker",
@@ -123,6 +124,7 @@ async function BotReplyMsg(res, replyToken, reqMsg){
             }
         break;
         case "image":
+            return null;
             message = {
                 type: 'text',
                 text: "汪汪汪汪汪! \n(幹嘛貼這種圖給我看)"

@@ -17,9 +17,9 @@ const cheerio = require("cheerio");
 async function fetchData(customerUrl){
     // console.log(customerUrl);
     // console.log(siteUrl+customerUrl);
-    const result = await axios.get(customerUrl);
+    let result = await axios.get(customerUrl);
     
-    return cheerio.load(result.data);
+    return cheerio.load(result);
 }
 
 async function getReslut(select_page){
@@ -48,10 +48,10 @@ async function getReslut(select_page){
     let $ = await fetchData(customerUrl);
     // siteName = $('.top > .action-post-job').text();
     console.log("---get back $---",$);
-    cwbImg = $("img");
-    console.log("---cwb img---",cwbImg);
 
-    return customerUrl;
+    let result = await axios.get(customerUrl);
+
+    return result;
 }
 
 //set line bot client

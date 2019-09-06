@@ -28,13 +28,15 @@ async function getReslut(select_page){
     //接收應讀取的項目
     switch (select_page) {
         case "衛星":
-            customerUrl="W/OBS_Sat.html";
+            // customerUrl = "W/OBS_Sat.html";
+            customerUrl = "/Data/satellite/LCC_IR1_CR_1000/LCC_IR1_CR_1000.jpg";
         break;
         case "雷達":
-            customerUrl="W/OBS_Radar.html";
+            // customerUrl="W/OBS_Radar.html";
+            customerUrl = "/Data/radar/CV1_1000.png";
         break;
         case "雨量":
-            customerUrl="P/Rainfall/Rainfall_QZJ.html";
+            customerUrl = "P/Rainfall/Rainfall_QZJ.html";
             selector = "[role=tabpanel] > img";
         break;
         default:
@@ -47,7 +49,7 @@ async function getReslut(select_page){
     cwbImg = $(selector).attr('src');
     console.log("https://www.cwb.gov.tw"+cwbImg);
 
-    return "https://www.cwb.gov.tw"+cwbImg;
+    return "https://www.cwb.gov.tw"+customerUrl;
 }
 
 //set line bot client

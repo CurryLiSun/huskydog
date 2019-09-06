@@ -23,7 +23,7 @@ async function fetchData(customerUrl){
 }
 
 async function getReslut(select_page){
-    let customerUrl = new Set();
+    let customerUrl = "";
     let selector = ".zoomHolder  > img";
     console.log("---getResult---",select_page);
     //接收應讀取的項目

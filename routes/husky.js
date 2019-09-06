@@ -38,7 +38,8 @@ async function getReslut(select_page){
             selector = "[role=tabpanel] > img";
         break;
         default:
-            break;
+            return null;
+        break;
     }
 
     let $ = await fetchData(customerUrl);
@@ -129,22 +130,24 @@ async function BotReplyMsg(res, replyToken, reqMsg){
         break;
 
         default:
+            let spiltStr = reqMsg.text.split(";");
+            let replyImgUrl = await getReslut(spiltStr[0]);
+            
+            if(replyImgUrl !== null){
+                message = {
+                    type: "image",
+                    originalContentUrl: replyImgUrl,
+                    previewImageUrl: replyImgUrl
+                };
+            }
+            
+            /*
             message = {
                 type: 'text',
                 text: reqMsg.text
             };
+            */
         break;
-    }
-
-    if (reqMsg.text !== null) {
-        let spiltStr = reqMsg.text.split(";");
-        let replyImgUrl = await getReslut(spiltStr[0]);
-        
-        message = {
-            type: "image",
-            originalContentUrl: replyImgUrl,
-            previewImageUrl: replyImgUrl
-        };
     }
 
     client.replyMessage(replyToken, message)

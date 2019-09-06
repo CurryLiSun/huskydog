@@ -45,7 +45,7 @@ async function getReslut(select_page){
     let $ = await fetchData(customerUrl);
     // siteName = $('.top > .action-post-job').text();
     cwbImg = $(selector).attr('src');
-    // console.log("https://www.cwb.gov.tw"+cwbImg);
+    console.log("https://www.cwb.gov.tw"+cwbImg);
 
     return "https://www.cwb.gov.tw"+cwbImg;
 }
@@ -64,9 +64,9 @@ router.get('/', function (req, res, next) {
 // POST method route
 router.post('/testpost', async function (req, res) {
     //replyUrl = await getReslut(req.body.test);
-    let spiltStr = req.body.test.split(";");
-    console.log(spiltStr);
-    console.log(spiltStr[0]);
+    // let spiltStr = req.body.test.split(";");
+    let replyImgUrl = await getReslut(req.body.test);
+    console.log(replyImgUrl);
 
     //標籤三種:1.衛星 2.雷達 3.雨量
     res.send(req.body);

@@ -18,22 +18,23 @@ async function fetchData(customerUrl){
     // console.log(customerUrl);
     // console.log(siteUrl+customerUrl);
     const result = await axios.get(customerUrl);
+    
     return cheerio.load(result.data);
 }
 
 async function getReslut(select_page){
     let customerUrl = "";
     let selector = ".zoomHolder  > img";
-    console.log(select_page);
+    console.log("---getResult---",select_page);
     //接收應讀取的項目
     switch (select_page) {
         case "衛星":
             // customerUrl = "W/OBS_Sat.html";
-            customerUrl = "/Data/satellite/LCC_IR1_CR_1000/LCC_IR1_CR_1000.jpg";
+            customerUrl = "https://www.cwb.gov.tw/Data/satellite/LCC_IR1_CR_1000/LCC_IR1_CR_1000.jpg";
         break;
         case "雷達":
             // customerUrl="W/OBS_Radar.html";
-            customerUrl = "/Data/radar/CV1_1000.png";
+            customerUrl = "https://www.cwb.gov.tw/Data/radar/CV1_1000.png";
         break;
         case "雨量":
             customerUrl = "P/Rainfall/Rainfall_QZJ.html";
@@ -44,12 +45,13 @@ async function getReslut(select_page){
         break;
     }
 
-    let $ = await fetchData("https://www.cwb.gov.tw"+customerUrl);
+    let $ = await fetchData(customerUrl);
     // siteName = $('.top > .action-post-job').text();
-    cwbImg = $("img").attr('src');
-    console.log("https://www.cwb.gov.tw"+customerUrl);
+    console.log("---get back $---",$);
+    cwbImg = $("img");
+    console.log("---cwb img---",cwbImg);
 
-    return cwbImg;
+    return customerUrl;
 }
 
 //set line bot client
@@ -68,7 +70,7 @@ router.post('/testpost', async function (req, res) {
     //replyUrl = await getReslut(req.body.test);
     // let spiltStr = req.body.test.split(";");
     let replyImgUrl = await getReslut(req.body.test);
-    console.log(replyImgUrl);
+    //console.log("---replyImgUrl---",replyImgUrl);
 
     //標籤三種:1.衛星 2.雷達 3.雨量
     res.send(req.body);

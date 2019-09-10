@@ -10,6 +10,7 @@ const channelToken = "LJb2VigkfYE0/+WZAfxLAEwPdC9hmqvMK9jPkT7RahK5/Mc9lyxqRlGF4C
 const line = require('@line/bot-sdk');
 
 //set scraping setting
+var https = require('https');
 const axios = require('axios');
 const cheerio = require("cheerio");
 // const siteUrl = "https://remoteok.io/";
@@ -20,6 +21,60 @@ async function fetchData(customerUrl){
     let result = await axios.get(customerUrl);
     
     return cheerio.load(result);
+}
+
+function dontWork(params) {
+    var options = {
+        method: 'POST',
+        host:"api.imgur.com",
+        path:'/3/image',
+        headers:{Authorization : "Client-ID 105b9032c7f67b2"}
+    };
+    
+    var resData = "";
+
+    var req = https.request(options, function (res) {
+        var chunks = [];
+        
+        res.on("data", function (chunk) {
+            chunks.push(chunk);
+        });
+        
+        res.on("end", function (chunk) {
+            var body = Buffer.concat(chunks);
+            resData = JSON.parse(body);
+            resData = resData["data"]["link"];
+            // console.log("end1",body.toString());
+            console.log("end2",resData);
+            
+        });
+        
+        res.on("error", function (error) {
+            console.error("error",error);
+        });
+    });
+    
+    req.write(web_url);
+    
+    req.end();
+}
+
+async function uploadToImgur(web_url) {
+    //upload to imgur
+    let resLink = "";
+    let getLink = await axios({
+        method: 'post',
+        url: 'https://api.imgur.com/3/image',
+        headers: { 'authorization': 'Client-ID 105b9032c7f67b2'},
+        data: { image: web_url}
+    }).then(function(response) {
+        resLink = response.data["data"]["link"];
+        // console.log("---axios",response.data);
+    }).catch(function(error) {
+        console.log("---error",error);
+    });
+    // console.log("---getLink",resLink);
+    return resLink;
 }
 
 async function getReslut(select_page){
@@ -45,11 +100,11 @@ async function getReslut(select_page){
         break;
     }
     
-    let $ = await fetchData(customerUrl);
+    //let $ = await fetchData(customerUrl);
     // siteName = $('.top > .action-post-job').text();
     // console.log("---get back $---",$);
-
-    return customerUrl;
+    
+    return uploadToImgur(customerUrl);
 }
 
 //set line bot client
@@ -65,13 +120,17 @@ router.get('/', function (req, res, next) {
 
 // POST method route
 router.post('/testpost', async function (req, res) {
+    console.log("---process testpost start---");
     //replyUrl = await getReslut(req.body.test);
     // let spiltStr = req.body.test.split(";");
     let replyImgUrl = await getReslut(req.body.test);
     //console.log("---replyImgUrl---",replyImgUrl);
-
+    console.log("testpost",replyImgUrl);
     //標籤三種:1.衛星 2.雷達 3.雨量
-    res.send(req.body);
+    //res.send(req.body);
+    res.send(replyImgUrl);
+
+    console.log("---process testpost end---");
 });
 
 // POST method route

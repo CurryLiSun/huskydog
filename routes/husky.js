@@ -107,6 +107,39 @@ async function getReslut(select_page){
     return uploadToImgur(customerUrl);
 }
 
+async function getReslut2(select_page){
+    //接收應讀取的項目
+    switch (select_page) {
+        case "衛星":
+            // customerUrl = "W/OBS_Sat.html";
+            customerUrl = "https://www.cwb.gov.tw/Data/satellite/LCC_IR1_CR_1000/LCC_IR1_CR_1000.jpg";
+        break;
+        case "雷達":
+            // customerUrl="W/OBS_Radar.html";
+            customerUrl = "https://www.cwb.gov.tw/Data/js/obs_img/Observe_radar.js";
+        break;
+        case "雨量":
+            customerUrl = "P/Rainfall/Rainfall_QZJ.html";
+            selector = "[role=tabpanel] > img";
+        break;
+        default:
+            return null;
+        break;
+    }
+
+    let getLink = await axios({
+        method: 'get',
+        url: customerUrl,
+    }).then(function(response) {
+        resLink = response;
+        console.log("---axios",resLink);
+    }).catch(function(error) {
+        console.log("---error",error);
+    });
+
+    return "resLink";
+}
+
 //set line bot client
 const client = new line.Client({
     channelSecret: channelSecret,
@@ -123,7 +156,7 @@ router.post('/testpost', async function (req, res) {
     console.log("---process testpost start---");
     //replyUrl = await getReslut(req.body.test);
     // let spiltStr = req.body.test.split(";");
-    let replyImgUrl = await getReslut(req.body.test);
+    let replyImgUrl = await getReslut2(req.body.test);
     //console.log("---replyImgUrl---",replyImgUrl);
     console.log("testpost",replyImgUrl);
     //標籤三種:1.衛星 2.雷達 3.雨量

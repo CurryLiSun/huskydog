@@ -23,42 +23,6 @@ async function fetchData(customerUrl){
     return cheerio.load(result);
 }
 
-function dontWork(params) {
-    var options = {
-        method: 'POST',
-        host:"api.imgur.com",
-        path:'/3/image',
-        headers:{Authorization : "Client-ID 105b9032c7f67b2"}
-    };
-    
-    var resData = "";
-
-    var req = https.request(options, function (res) {
-        var chunks = [];
-        
-        res.on("data", function (chunk) {
-            chunks.push(chunk);
-        });
-        
-        res.on("end", function (chunk) {
-            var body = Buffer.concat(chunks);
-            resData = JSON.parse(body);
-            resData = resData["data"]["link"];
-            // console.log("end1",body.toString());
-            console.log("end2",resData);
-            
-        });
-        
-        res.on("error", function (error) {
-            console.error("error",error);
-        });
-    });
-    
-    req.write(webUrl);
-    
-    req.end();
-}
-
 async function uploadToImgur(webUrl) {
     //upload to imgur
     let resLink = "";
@@ -107,7 +71,7 @@ async function getReslut(selectPage){
     return uploadToImgur(customerUrl);
 }
 
-async function getReslut2(selectPage){
+async function getCwbImg(selectPage){
     let resultUrl = "";
     let customerUrl = "";
     // define search point & split point
@@ -179,7 +143,7 @@ router.post('/testpost', async function (req, res) {
     console.log("---process testpost start---");
     //replyUrl = await getReslut(req.body.test);
     // let spiltStr = req.body.test.split(";");
-    let replyImgUrl = await getReslut2(req.body.test);
+    let replyImgUrl = await getCwbImg(req.body.test);
     //console.log("---replyImgUrl---",replyImgUrl);
     // console.log("testpost---",replyImgUrl);
     //標籤三種:1.衛星 2.雷達 3.雨量
@@ -251,7 +215,7 @@ async function BotReplyMsg(res, replyToken, reqMsg){
         default:
             //以;切割字串
             let spiltStr = reqMsg.text.split(";");
-            let replyImgUrl = await getReslut2(spiltStr[0]);
+            let replyImgUrl = await getCwbImg(spiltStr[0]);
             
             if(replyImgUrl !== null){
                 message = {

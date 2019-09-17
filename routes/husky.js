@@ -157,17 +157,17 @@ router.post('/testpost', async function (req, res) {
 router.post('/', function (req, res) {
     // get requset item
     let replyToken = req.body.events[0].replyToken;
-    let replyType = req.body.events[0].type;
-    let replySource = req.body.events[0].source;
+    let reqType = req.body.events[0].type;
+    let reqSource = req.body.events[0].source;
     let reqMsg = req.body.events[0].message;
 
     //log reqest item
-    console.log("---replySource---",replySource);
-    //console.log("---replyType---",replyType);
+    console.log("---reqSource---",reqSource);
+    //console.log("---reqType---",reqType);
     console.log("---reqMsg---",reqMsg);
     // console.log(replyToken);
 
-    switch (replyType) {
+    switch (reqType) {
         case "follow":
 
         break;
@@ -177,7 +177,7 @@ router.post('/', function (req, res) {
         break;
 
         case "join":
-            BotJoin(res, replyToken, replySource);
+            BotJoin(res, replyToken, reqSource);
         break;
         
         case "leave":

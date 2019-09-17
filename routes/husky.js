@@ -54,19 +54,19 @@ function dontWork(params) {
         });
     });
     
-    req.write(web_url);
+    req.write(webUrl);
     
     req.end();
 }
 
-async function uploadToImgur(web_url) {
+async function uploadToImgur(webUrl) {
     //upload to imgur
     let resLink = "";
     let getLink = await axios({
         method: 'post',
         url: 'https://api.imgur.com/3/image',
         headers: { 'authorization': 'Client-ID 105b9032c7f67b2'},
-        data: { image: web_url}
+        data: { image: webUrl}
     }).then(function(response) {
         resLink = response.data["data"]["link"];
         // console.log("---axios",response.data);
@@ -77,12 +77,12 @@ async function uploadToImgur(web_url) {
     return resLink;
 }
 
-async function getReslut(select_page){
+async function getReslut(selectPage){
     let customerUrl = "";
     let selector = ".zoomHolder  > img";
-    console.log("---getResult---",select_page);
+    console.log("---getResult---",selectPage);
     //接收應讀取的項目
-    switch (select_page) {
+    switch (selectPage) {
         case "衛星":
             // customerUrl = "W/OBS_Sat.html";
             customerUrl = "https://www.cwb.gov.tw/Data/satellite/LCC_IR1_CR_1000/LCC_IR1_CR_1000.jpg";
@@ -107,20 +107,37 @@ async function getReslut(select_page){
     return uploadToImgur(customerUrl);
 }
 
-async function getReslut2(select_page){
-    //接收應讀取的項目
-    switch (select_page) {
+async function getReslut2(selectPage){
+    let resultUrl = "";
+    let customerUrl = "";
+    // define search point & split point
+    let splitStr = "";
+    let idxSplitPoint = 0;
+    let idxStrHead = ":\'";
+    let idxStrEnd = "\',";
+    let onlyRainUrl = "";
+
+    switch (selectPage) {
         case "衛星":
             // customerUrl = "W/OBS_Sat.html";
-            customerUrl = "https://www.cwb.gov.tw/Data/satellite/LCC_IR1_CR_1000/LCC_IR1_CR_1000.jpg";
+            customerUrl = "https://www.cwb.gov.tw/Data/js/obs_img/Observe_sat.js";
+            resultUrl = "https://www.cwb.gov.tw/Data/satellite/";
+            idxSplitPoint = 2;
+            splitStr = "Area1";
         break;
         case "雷達":
             // customerUrl="W/OBS_Radar.html";
             customerUrl = "https://www.cwb.gov.tw/Data/js/obs_img/Observe_radar.js";
+            resultUrl = "https://www.cwb.gov.tw/Data/radar/";
+            idxSplitPoint = 1;
+            splitStr = "Area0";
         break;
         case "雨量":
-            customerUrl = "P/Rainfall/Rainfall_QZJ.html";
-            selector = "[role=tabpanel] > img";
+            customerUrl = "https://www.cwb.gov.tw/Data/js/rainfall/RainfallImg_Day.js";
+            resultUrl = "https://www.cwb.gov.tw/Data/rainfall/";
+            idxSplitPoint = 1;
+            splitStr = "Day0";
+            onlyRainUrl = ".jpg";
         break;
         default:
             return null;
@@ -131,13 +148,19 @@ async function getReslut2(select_page){
         method: 'get',
         url: customerUrl,
     }).then(function(response) {
-        resLink = response;
-        console.log("---axios",resLink);
+        resLink = response.data.split(splitStr);
+        // console.log("---axios2",typeof(resLink.data));
+        // console.log(CircularJSON.stringify(resLink));
+        // console.log("---axios1",resLink.data);
+        let a = resLink[idxSplitPoint].indexOf(idxStrHead);
+        let b = resLink[idxSplitPoint].indexOf(idxStrEnd);
+        
+        resultUrl = resultUrl + resLink[idxSplitPoint].substring(a+2,b);
     }).catch(function(error) {
         console.log("---error",error);
     });
 
-    return "resLink";
+    return resultUrl + onlyRainUrl;
 }
 
 //set line bot client
@@ -158,10 +181,10 @@ router.post('/testpost', async function (req, res) {
     // let spiltStr = req.body.test.split(";");
     let replyImgUrl = await getReslut2(req.body.test);
     //console.log("---replyImgUrl---",replyImgUrl);
-    console.log("testpost",replyImgUrl);
+    // console.log("testpost---",replyImgUrl);
     //標籤三種:1.衛星 2.雷達 3.雨量
-    //res.send(req.body);
-    res.send(replyImgUrl);
+    res.send(req.body);
+    // res.send(replyImgUrl);
 
     console.log("---process testpost end---");
 });
@@ -226,8 +249,9 @@ async function BotReplyMsg(res, replyToken, reqMsg){
         break;
 
         default:
+            //以;切割字串
             let spiltStr = reqMsg.text.split(";");
-            let replyImgUrl = await getReslut(spiltStr[0]);
+            let replyImgUrl = await getReslut2(spiltStr[0]);
             
             if(replyImgUrl !== null){
                 message = {

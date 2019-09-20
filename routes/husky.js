@@ -185,14 +185,27 @@ router.post('/', function (req, res) {
         break;
     
         default:
-            BotReplyMsg(res, replyToken, reqMsg);
+            BotReplyMsg(res, replyToken, reqMsg, reqSource);
         break;
     }
 
     //res.sendStatus(200);
 });
 
-async function BotReplyMsg(res, replyToken, reqMsg){
+async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
+    //get member info
+    client.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
+    .then((profile) => {
+        console.log(profile.displayName);
+        console.log(profile.userId);
+        console.log(profile.pictureUrl);
+        console.log(profile.statusMessage);
+    })
+    .catch((err) => {
+        // error handling
+        console.log("---greet error",err);
+    });
+
     let message;
     switch (reqMsg.type) {
         case "sticker":
@@ -254,14 +267,16 @@ function BotJoin(res, replyToken, replySource){
     };
 
     //get group user id
+    /*
     client.getGroupMemberIds(replySource.groupId)
     .then((ids) => {
         ids.forEach((id) => console.log(id));
     })
     .catch((err) => {
         // error handling
-        console.log("greet error---",err);
+        console.log("---greet error",err);
     });
+    */
 
     client.pushMessage(replySource.groupId, message)
         .then(() => {

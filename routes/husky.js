@@ -35,9 +35,11 @@ router.post('/testpost', async function (req, res) {
     //console.log("---replyImgUrl---",replyImgUrl);
     // console.log("testpost---",replyImgUrl);
     
+    console.log("---testCallFunc",testCallFunc());
+
     //標籤三種:1.衛星 2.雷達 3.雨量
-    // res.send(req.body);
-    res.send(randomToReply());
+    res.send(req.body);
+    // res.send(randomToReply());
 
     console.log("---process testpost end---");
 });

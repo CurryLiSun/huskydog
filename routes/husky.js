@@ -34,6 +34,7 @@ router.post('/testpost', async function (req, res) {
     let replyImgUrl = await getCwbImg(req.body.test);
     //console.log("---replyImgUrl---",replyImgUrl);
     // console.log("testpost---",replyImgUrl);
+    
     //標籤三種:1.衛星 2.雷達 3.雨量
     // res.send(req.body);
     res.send(randomToReply());
@@ -96,7 +97,7 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
     });
 
     let message;
-    let randomNum = randomToReply().then();
+    let randomNum = await randomToReply().then();
 
     switch (reqMsg.type) {
         case "sticker":
@@ -161,7 +162,23 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                     previewImageUrl: replyImgUrl
                 }];
             }
-            
+
+            if (randomNum !== null) {
+                message = [
+                {
+                    type: 'text',
+                    text: getProfile.displayName+"是個幸運的渾蛋"
+                },
+                {
+                    type: 'text',
+                    text: "以萬分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
+                },
+                {
+                    type: 'text',
+                    text: reqMsg.text
+                }];
+            }
+
             /*
             message = {
                 type: 'text',

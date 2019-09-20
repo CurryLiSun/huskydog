@@ -231,11 +231,16 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
             let replyImgUrl = await getCwbImg(spiltStr[0]);
             
             if(replyImgUrl !== null){
-                message = {
+                message = [
+                {
+                    type: 'text',
+                    text: "你要找資料???"
+                },
+                {
                     type: "image",
                     originalContentUrl: replyImgUrl,
                     previewImageUrl: replyImgUrl
-                };
+                }];
             }
             
             /*

@@ -195,7 +195,7 @@ router.post('/', function (req, res) {
 async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
     //get member info
     let profile;
-    await client.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
+    client.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
     .then((profile) => {
         console.log(profile.displayName);
         console.log(profile.userId);
@@ -235,7 +235,7 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                 message = [
                 {
                     type: 'text',
-                    text: profile.displayName+"要找資料???"
+                    text: "要找資料???"
                 },
                 {
                     type: "image",

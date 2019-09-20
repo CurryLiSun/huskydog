@@ -107,7 +107,7 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                 },
                 {
                     type: 'text',
-                    text: "在兩次100個隨機數裡面命中2次" + randomNum + "才觸發回應功能"
+                    text: "以萬分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
                 },
                 {
                     id: reqMsg.id,
@@ -128,7 +128,7 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                 },
                 {
                     type: 'text',
-                    text: "在兩次100個隨機數裡面命中2次" + randomNum + "才觸發回應功能"
+                    text: "以萬分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
                 },
                 {
                     type: 'text',
@@ -160,7 +160,24 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                     previewImageUrl: replyImgUrl
                 }];
             }
-            
+
+            if (randomNum !== null) {
+                message = [
+                {
+                    type: 'text',
+                    text: getProfile.displayName+"是個幸運的渾蛋"
+                },
+                {
+                    type: 'text',
+                    text: "以萬分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
+                },
+                {
+                    type: 'text',
+                    text: reqMsg.text
+                }]
+            } else {
+                return null;
+            }
             /*
             message = {
                 type: 'text',
@@ -217,7 +234,7 @@ function BotLeave(){
     //clear db data
 }
 
-function randomToReply() {
+async function randomToReply() {
     let a = Math.floor(Math.random()*100)+1;
     let b = Math.floor(Math.random()*100)+1;
     if (a === b) {

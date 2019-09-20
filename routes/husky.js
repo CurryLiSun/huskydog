@@ -194,13 +194,13 @@ router.post('/', function (req, res) {
 
 async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
     //get member info
-    let profile;
-    client.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
+    let getProfile = await Pclient.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
     .then((profile) => {
         console.log(profile.displayName);
         console.log(profile.userId);
         console.log(profile.pictureUrl);
         console.log(profile.statusMessage);
+        return profile;
     })
     .catch((err) => {
         // error handling
@@ -231,6 +231,8 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
             let spiltStr = reqMsg.text.split(";");
             let replyImgUrl = await getCwbImg(spiltStr[0]);
             
+            console.log("---getProfile",getProfile);
+
             if(replyImgUrl !== null){
                 message = [
                 {
@@ -254,15 +256,15 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
     }
 
     client.replyMessage(replyToken, message)
-        .then(() => {
-            //console.log("replyMessage success");
-            res.sendStatus(200);
-        })
-        .catch((err) => {
-        // error handling
-            //console.log(err);
-            res.send(err);
-        }); 
+    .then(() => {
+        //console.log("replyMessage success");
+        res.sendStatus(200);
+    })
+    .catch((err) => {
+    // error handling
+        //console.log(err);
+        res.send(err);
+    }); 
 }
 
 function BotJoin(res, replyToken, replySource){

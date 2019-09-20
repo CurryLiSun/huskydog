@@ -117,8 +117,6 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                     stickerId: "51626520",
                     packageId: "11538"
                 }]
-            } else {
-                return null;
             }
         break;
         case "image":
@@ -131,9 +129,8 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                 {
                     type: 'text',
                     text: "以萬分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
-                }];
-            }else{
-                return null;
+                }
+            ];
             }
         break;
 

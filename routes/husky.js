@@ -113,7 +113,7 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                 },
                 {
                     type: 'text',
-                    text: "以萬分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
+                    text: "以千分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
                 },
                 {
                     id: reqMsg.id,
@@ -132,7 +132,7 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                 },
                 {
                     type: 'text',
-                    text: "以萬分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
+                    text: "以千分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
                 }
             ];
             }
@@ -168,7 +168,7 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                 },
                 {
                     type: 'text',
-                    text: "以萬分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
+                    text: "以千分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
                 },
                 {
                     type: 'text',
@@ -234,7 +234,7 @@ function BotLeave(){
 
 async function randomToReply() {
     let a = Math.floor(Math.random()*100)+1;
-    let b = Math.floor(Math.random()*100)+1;
+    let b = Math.floor(Math.random()*10)+1;
     console.log("---a",a);
     console.log("---b",b);
     if (a === b) {

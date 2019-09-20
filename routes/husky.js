@@ -96,7 +96,8 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
     });
 
     let message;
-    let randomNum = randomToReply();
+    let randomNum = randomToReply().then();
+
     switch (reqMsg.type) {
         case "sticker":
             if (randomNum !== null) {

@@ -231,6 +231,8 @@ function BotLeave(){
 async function randomToReply() {
     let a = Math.floor(Math.random()*100)+1;
     let b = Math.floor(Math.random()*100)+1;
+    console.log("---a",a);
+    console.log("---b",b);
     if (a === b) {
         return a;
     }else{

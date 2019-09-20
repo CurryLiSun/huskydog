@@ -196,15 +196,15 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
     //get member info
     let getProfile = await client.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
     .then((profile) => {
-        console.log(profile.displayName);
-        console.log(profile.userId);
-        console.log(profile.pictureUrl);
-        console.log(profile.statusMessage);
+        // console.log(profile.displayName);
+        // console.log(profile.userId);
+        // console.log(profile.pictureUrl);
+        // console.log(profile.statusMessage);
         return profile;
     })
     .catch((err) => {
         // error handling
-        console.log("---greet error",err);
+        console.log("---getProfile error",err);
     });
 
     let message;
@@ -231,13 +231,15 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
             let spiltStr = reqMsg.text.split(";");
             let replyImgUrl = await getCwbImg(spiltStr[0]);
             
-            console.log("---getProfile",getProfile);
-
             if(replyImgUrl !== null){
                 message = [
                 {
                     type: 'text',
-                    text: "要找資料???"
+                    text: getProfile.displayName+"要找資料???"
+                },
+                {
+                    type: 'text',
+                    text: "這是中央氣象局的資料的啦!"
                 },
                 {
                     type: "image",
@@ -274,7 +276,7 @@ function BotJoin(res, replyToken, replySource){
         text: "汪汪汪汪汪汪汪!! \n(真開心又可以對一群人說話了)"
     };
 
-    //get group user id
+    //get group user id ! but only for VIP
     /*
     client.getGroupMemberIds(replySource.groupId)
     .then((ids) => {
@@ -287,15 +289,15 @@ function BotJoin(res, replyToken, replySource){
     */
 
     client.pushMessage(replySource.groupId, message)
-        .then(() => {
-            //console.log("pushMessage success");
-            res.sendStatus(200);
-        })
-        .catch((err) => {
-        // error handling
-            //console.log(err);
-            res.send(err);
-        }); 
+    .then(() => {
+        //console.log("pushMessage success");
+        res.sendStatus(200);
+    })
+    .catch((err) => {
+    // error handling
+        //console.log(err);
+        res.send(err);
+    }); 
 }
 
 function BotLeave(){

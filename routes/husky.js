@@ -229,8 +229,8 @@ function BotLeave(){
 }
 
 async function randomToReply() {
-    let a = Math.floor(Math.random()*5)+1;
-    let b = Math.floor(Math.random()*5)+1;
+    let a = Math.floor(Math.random()*100)+1;
+    let b = Math.floor(Math.random()*100)+1;
     if (a === b) {
         return a;
     }else{

@@ -161,24 +161,7 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                     previewImageUrl: replyImgUrl
                 }];
             }
-
-            if (randomNum !== null) {
-                message = [
-                {
-                    type: 'text',
-                    text: getProfile.displayName+"是個幸運的渾蛋"
-                },
-                {
-                    type: 'text',
-                    text: "以萬分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
-                },
-                {
-                    type: 'text',
-                    text: reqMsg.text
-                }]
-            } else {
-                return null;
-            }
+            
             /*
             message = {
                 type: 'text',

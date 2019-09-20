@@ -260,6 +260,7 @@ function BotJoin(res, replyToken, replySource){
     })
     .catch((err) => {
         // error handling
+        console.log("greet error---",err);
     });
 
     client.pushMessage(replySource.groupId, message)

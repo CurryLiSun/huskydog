@@ -253,6 +253,15 @@ function BotJoin(res, replyToken, replySource){
         text: "汪汪汪汪汪汪汪!! \n(真開心又可以對一群人說話了)"
     };
 
+    //get group user id
+    client.getGroupMemberIds(replySource.groupId)
+    .then((ids) => {
+        ids.forEach((id) => console.log(id));
+    })
+    .catch((err) => {
+        // error handling
+    });
+
     client.pushMessage(replySource.groupId, message)
         .then(() => {
             //console.log("pushMessage success");

@@ -195,7 +195,7 @@ router.post('/', function (req, res) {
 async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
     //get member info
     let profile;
-    client.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
+    await client.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
     .then((profile) => {
         console.log(profile.displayName);
         console.log(profile.userId);

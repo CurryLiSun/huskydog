@@ -27,6 +27,8 @@ router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
 
+const test = require("../public/javascripts/lineBotFunctions.js");
+
 // POST method route
 router.post('/testpost', async function (req, res) {
     console.log("---process testpost start---");
@@ -34,8 +36,8 @@ router.post('/testpost', async function (req, res) {
     let replyImgUrl = await getCwbImg(req.body.test);
     //console.log("---replyImgUrl---",replyImgUrl);
     // console.log("testpost---",replyImgUrl);
-    
-    console.log("---testCallFunc",testCallFunc());
+
+    console.log(test) // => "This is a test!"
 
     //標籤三種:1.衛星 2.雷達 3.雨量
     res.send(req.body);

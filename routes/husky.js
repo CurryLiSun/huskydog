@@ -15,6 +15,236 @@ const axios = require('axios');
 const cheerio = require("cheerio");
 // const siteUrl = "https://remoteok.io/";
 // let siteUrl = "https://www.cwb.gov.tw/V8/C/";
+
+//set line bot client
+const client = new line.Client({
+    channelSecret: channelSecret,
+    channelAccessToken: channelToken
+});
+
+/* GET users listing. */
+router.get('/', function (req, res, next) {
+    res.send('respond with a resource');
+});
+
+// POST method route
+router.post('/testpost', async function (req, res) {
+    console.log("---process testpost start---");
+    //replyUrl = await getReslut(req.body.test);
+    let replyImgUrl = await getCwbImg(req.body.test);
+    //console.log("---replyImgUrl---",replyImgUrl);
+    // console.log("testpost---",replyImgUrl);
+    //標籤三種:1.衛星 2.雷達 3.雨量
+    // res.send(req.body);
+    res.send(randomToReply());
+
+    console.log("---process testpost end---");
+});
+
+// POST method route
+router.post('/', function (req, res) {
+    // get requset item
+    let replyToken = req.body.events[0].replyToken;
+    let reqType = req.body.events[0].type;
+    let reqSource = req.body.events[0].source;
+    let reqMsg = req.body.events[0].message;
+
+    //log reqest item
+    console.log("---reqSource---",reqSource);
+    //console.log("---reqType---",reqType);
+    console.log("---reqMsg---",reqMsg);
+    // console.log(replyToken);
+
+    switch (reqType) {
+        case "follow":
+
+        break;
+
+        case "unfollow":
+
+        break;
+
+        case "join":
+            BotJoin(res, replyToken, reqSource);
+        break;
+        
+        case "leave":
+
+        break;
+    
+        default:
+            BotReplyMsg(res, replyToken, reqMsg, reqSource);
+        break;
+    }
+
+    //res.sendStatus(200);
+});
+
+async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
+    //get member info
+    let getProfile = await client.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
+    .then((profile) => {
+        // console.log(profile.displayName);
+        // console.log(profile.userId);
+        // console.log(profile.pictureUrl);
+        // console.log(profile.statusMessage);
+        return profile;
+    })
+    .catch((err) => {
+        // error handling
+        console.log("---getProfile error",err);
+    });
+
+    let message;
+    let randomNum = randomToReply();
+    switch (reqMsg.type) {
+        case "sticker":
+            if (randomNum !== null) {
+                message = [
+                {
+                    type: 'text',
+                    text: getProfile.displayName+"是個幸運的渾蛋"
+                },
+                {
+                    type: 'text',
+                    text: "在兩次100個隨機數裡面命中2次" + randomNum + "才觸發回應功能"
+                },
+                {
+                    id: reqMsg.id,
+                    type: "sticker",
+                    stickerId: "51626520",
+                    packageId: "11538"
+                }]
+            } else {
+                return null;
+            }
+        break;
+        case "image":
+            if (randomNum !== null) {
+                message = [
+                {
+                    type: 'text',
+                    text: getProfile.displayName+"是個幸運的渾蛋"
+                },
+                {
+                    type: 'text',
+                    text: "在兩次100個隨機數裡面命中2次" + randomNum + "才觸發回應功能"
+                },
+                {
+                    type: 'text',
+                    text: "汪汪汪汪汪! \n(幹嘛貼這種圖給我看)"
+                }];
+            }else{
+                return null;
+            }
+        break;
+
+        default:
+            //以;切割字串
+            let spiltStr = reqMsg.text.split(";");
+            let replyImgUrl = await getCwbImg(spiltStr[0]);
+            
+            if(replyImgUrl !== null){
+                message = [
+                {
+                    type: 'text',
+                    text: getProfile.displayName+"要找資料???"
+                },
+                {
+                    type: 'text',
+                    text: "這是中央氣象局的資料的啦!"
+                },
+                {
+                    type: "image",
+                    originalContentUrl: replyImgUrl,
+                    previewImageUrl: replyImgUrl
+                }];
+            }
+
+            if (randomNum !== null) {
+                message = [
+                {
+                    type: 'text',
+                    text: getProfile.displayName+"是個幸運的渾蛋"
+                },
+                {
+                    type: 'text',
+                    text: "在兩次100個隨機數裡面命中2次" + randomNum + "才觸發回應功能"
+                },
+                {
+                    type: 'text',
+                    text: reqMsg.text
+                }];
+            }else{
+                return null;
+            }
+            
+            /*
+            message = {
+                type: 'text',
+                text: reqMsg.text
+            };
+            */
+        break;
+    }
+
+    client.replyMessage(replyToken, message)
+    .then(() => {
+        //console.log("replyMessage success");
+        res.sendStatus(200);
+    })
+    .catch((err) => {
+    // error handling
+        //console.log(err);
+        res.send(err);
+    }); 
+}
+
+function BotJoin(res, replyToken, replySource){
+    //greeting word
+    let message = {
+        type: 'text',
+        text: "汪汪汪汪汪汪汪!! \n(真開心又可以對一群人說話了)"
+    };
+
+    //get group user id ! but only for VIP
+    /*
+    client.getGroupMemberIds(replySource.groupId)
+    .then((ids) => {
+        ids.forEach((id) => console.log(id));
+    })
+    .catch((err) => {
+        // error handling
+        console.log("---greet error",err);
+    });
+    */
+
+    client.pushMessage(replySource.groupId, message)
+    .then(() => {
+        //console.log("pushMessage success");
+        res.sendStatus(200);
+    })
+    .catch((err) => {
+    // error handling
+        //console.log(err);
+        res.send(err);
+    }); 
+}
+
+function BotLeave(){
+    //clear db data
+}
+
+function randomToReply() {
+    let a = Math.floor(Math.random()*100)+1;
+    let b = Math.floor(Math.random()*100)+1;
+    if (a === b) {
+        return a;
+    }else{
+        return null;
+    }
+}
+
 async function fetchData(customerUrl){
     // console.log(customerUrl);
     // console.log(siteUrl+customerUrl);
@@ -125,183 +355,6 @@ async function getCwbImg(selectPage){
     });
 
     return resultUrl + onlyRainUrl;
-}
-
-//set line bot client
-const client = new line.Client({
-    channelSecret: channelSecret,
-    channelAccessToken: channelToken
-});
-
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-    res.send('respond with a resource');
-});
-
-// POST method route
-router.post('/testpost', async function (req, res) {
-    console.log("---process testpost start---");
-    //replyUrl = await getReslut(req.body.test);
-    // let spiltStr = req.body.test.split(";");
-    let replyImgUrl = await getCwbImg(req.body.test);
-    //console.log("---replyImgUrl---",replyImgUrl);
-    // console.log("testpost---",replyImgUrl);
-    //標籤三種:1.衛星 2.雷達 3.雨量
-    res.send(req.body);
-    // res.send(replyImgUrl);
-
-    console.log("---process testpost end---");
-});
-
-// POST method route
-router.post('/', function (req, res) {
-    // get requset item
-    let replyToken = req.body.events[0].replyToken;
-    let reqType = req.body.events[0].type;
-    let reqSource = req.body.events[0].source;
-    let reqMsg = req.body.events[0].message;
-
-    //log reqest item
-    console.log("---reqSource---",reqSource);
-    //console.log("---reqType---",reqType);
-    console.log("---reqMsg---",reqMsg);
-    // console.log(replyToken);
-
-    switch (reqType) {
-        case "follow":
-
-        break;
-
-        case "unfollow":
-
-        break;
-
-        case "join":
-            BotJoin(res, replyToken, reqSource);
-        break;
-        
-        case "leave":
-
-        break;
-    
-        default:
-            BotReplyMsg(res, replyToken, reqMsg, reqSource);
-        break;
-    }
-
-    //res.sendStatus(200);
-});
-
-async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
-    //get member info
-    let getProfile = await client.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
-    .then((profile) => {
-        // console.log(profile.displayName);
-        // console.log(profile.userId);
-        // console.log(profile.pictureUrl);
-        // console.log(profile.statusMessage);
-        return profile;
-    })
-    .catch((err) => {
-        // error handling
-        console.log("---getProfile error",err);
-    });
-
-    let message;
-    switch (reqMsg.type) {
-        case "sticker":
-            return null;
-            message = {
-                id: reqMsg.id,
-                type: "sticker",
-                stickerId: "51626520",
-                packageId: "11538"
-            }
-        break;
-        case "image":
-            return null;
-            message = {
-                type: 'text',
-                text: "汪汪汪汪汪! \n(幹嘛貼這種圖給我看)"
-            };
-        break;
-
-        default:
-            //以;切割字串
-            let spiltStr = reqMsg.text.split(";");
-            let replyImgUrl = await getCwbImg(spiltStr[0]);
-            
-            if(replyImgUrl !== null){
-                message = [
-                {
-                    type: 'text',
-                    text: getProfile.displayName+"要找資料???"
-                },
-                {
-                    type: 'text',
-                    text: "這是中央氣象局的資料的啦!"
-                },
-                {
-                    type: "image",
-                    originalContentUrl: replyImgUrl,
-                    previewImageUrl: replyImgUrl
-                }];
-            }
-            
-            /*
-            message = {
-                type: 'text',
-                text: reqMsg.text
-            };
-            */
-        break;
-    }
-
-    client.replyMessage(replyToken, message)
-    .then(() => {
-        //console.log("replyMessage success");
-        res.sendStatus(200);
-    })
-    .catch((err) => {
-    // error handling
-        //console.log(err);
-        res.send(err);
-    }); 
-}
-
-function BotJoin(res, replyToken, replySource){
-    //greeting word
-    let message = {
-        type: 'text',
-        text: "汪汪汪汪汪汪汪!! \n(真開心又可以對一群人說話了)"
-    };
-
-    //get group user id ! but only for VIP
-    /*
-    client.getGroupMemberIds(replySource.groupId)
-    .then((ids) => {
-        ids.forEach((id) => console.log(id));
-    })
-    .catch((err) => {
-        // error handling
-        console.log("---greet error",err);
-    });
-    */
-
-    client.pushMessage(replySource.groupId, message)
-    .then(() => {
-        //console.log("pushMessage success");
-        res.sendStatus(200);
-    })
-    .catch((err) => {
-    // error handling
-        //console.log(err);
-        res.send(err);
-    }); 
-}
-
-function BotLeave(){
-    //clear db data
 }
 
 module.exports = router;

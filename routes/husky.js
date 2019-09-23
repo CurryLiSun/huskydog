@@ -27,7 +27,11 @@ router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
 
+//reconstruct
 const test = require("../public/javascripts/lineBotFunctions.js");
+//postgre sql test
+var pgp = require("pg-promise")(/*options*/);
+var db = pgp("postgres://postgres:123456@localhost:5432/postgres");
 
 // POST method route
 router.post('/testpost', async function (req, res) {
@@ -37,7 +41,18 @@ router.post('/testpost', async function (req, res) {
     //console.log("---replyImgUrl---",replyImgUrl);
     // console.log("testpost---",replyImgUrl);
 
+    //reconstruct
     console.log(test) // => "This is a test!"
+
+    //postgre sql test
+    db.one("SELECT * From test")
+    .then(function (data) {
+        console.log("---DATA1:", data);
+        console.log("---DATA2:", data.message);
+    })
+    .catch(function (error) {
+        console.log("ERROR:", error);
+    });
 
     //標籤三種:1.衛星 2.雷達 3.雨量
     res.send(req.body);

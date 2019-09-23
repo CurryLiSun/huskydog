@@ -1,0 +1,45 @@
+{
+    "dev": {
+        "driver": "pg",
+        "user": "postgres",
+        "password": "123456",
+        "host": "localhost",
+        "database": "postgres",
+        "schema": "public"
+    },
+  
+    "test": {
+        "driver": "pg",
+        "user": "postgres",
+        "password": "123456",
+        "host": "localhost",
+        "database": "postgres",
+        "schema": "public"
+    },
+  
+    "prod": {
+        "driver": "pg",
+        "user": "postgres",
+        "password": "123456",
+        "host": "localhost",
+        "database": "postgres",
+        "schema": "public"
+    },
+  
+    "pg": {
+      "driver": "pg",
+      "user": "postgres",
+      "password": "123456",
+      "host": "localhost",
+      "database": "postgres",
+      "schema": "public"
+    },
+  
+    "mongo": {
+      "driver": "mongodb",
+      "database": "my_db",
+      "host": "localhost"
+    },
+  
+    "other": "postgres://uname:pw@server.com/dbname"
+  }

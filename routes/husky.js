@@ -274,7 +274,7 @@ function BotLeave(){
 async function searchKeyword(source_str, getProfile, groupId){
     let message = null;
     let querySql = "SELECT * FROM keyword_mapping WHERE keyword = $1";
-    let querySqlValues = [source_str[0], groupId];
+    let querySqlValues = [source_str[0]];
     // console.log("---search querySqlValues",querySqlValues);
     try {
         let herokuSqlClient = await herokuSql.connect();

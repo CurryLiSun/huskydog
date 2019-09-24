@@ -272,11 +272,14 @@ function BotLeave(){
 }
 
 async function searchKeyword(source_str, getProfile){
-    
+
     try {
         let herokuSqlClient = await herokuSql.connect()
         let doSqlResult = await herokuSqlClient.query("SELECT * FROM keyword_mapping WHERE keyword = $1", source_str);
         let result = doSqlResult.rows;
+        if (result[0] === null || result[0] === undefined) {
+            return null;
+        }
         console.log('---pages/db', result );
         herokuSqlClient.release();
     } catch (err) {

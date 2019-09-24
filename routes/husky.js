@@ -280,6 +280,7 @@ async function searchKeyword(source_str, getProfile, groupId){
         let herokuSqlClient = await herokuSql.connect();
         let doSqlResult = await herokuSqlClient.query(querySql, querySqlValues);
         let searchResult = doSqlResult.rows;
+        console.log("---search searchResult",searchResult);
         if (searchResult[0] === null || searchResult[0] === undefined) {
             return null;
         }else{
@@ -287,7 +288,7 @@ async function searchKeyword(source_str, getProfile, groupId){
             message = [
             {
                 type: 'text',
-                text: searchResult.message
+                text: "."
             }];
         }
         // console.log('---pages/db', result );
@@ -301,6 +302,9 @@ async function searchKeyword(source_str, getProfile, groupId){
 
 async function learnKeyword(source_str, getProfile, groupId){
     if (source_str[0] !== "學說話") {
+        return null;
+    }
+    if (source_str[1] !== "" || source_str[2] !== "") {
         return null;
     }
 

@@ -181,6 +181,10 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
         case "text":
             //以;切割字串
             let spiltStr = reqMsg.text.split(";");
+            //scrap cwb
+            if (message === null) {
+                message = await getCwbImg(spiltStr,getProfile);
+            }
             //learn keyword
             if (message === null) {
                 message = await learnKeyword(spiltStr,getProfile);
@@ -188,10 +192,6 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
             //search keyword
             if (message === null) {
                 message = await searchKeyword(spiltStr,getProfile);
-            }
-            //scrap cwb
-            if (message === null) {
-                message = await getCwbImg(spiltStr,getProfile);
             }
 
             //random lucky number

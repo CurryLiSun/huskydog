@@ -272,29 +272,29 @@ function BotLeave(){
 }
 
 async function searchKeyword(source_str, getProfile, groupId){
-    let searchResult = null;
+    let message = null;
     let querySql = "SELECT * FROM keyword_mapping WHERE keyword = $1";
     let querySqlValues = [source_str[0], groupId];
-    console.log("---search querySqlValues",querySqlValues);
+    // console.log("---search querySqlValues",querySqlValues);
     try {
         let herokuSqlClient = await herokuSql.connect();
         let doSqlResult = await herokuSqlClient.query(querySql, querySqlValues);
-        searchResult = doSqlResult.rows;
+        let searchResult = doSqlResult.rows;
         if (searchResult[0] === null || searchResult[0] === undefined) {
             return null;
+        }else{
+            // reply searched message
+            message = [
+            {
+                type: 'text',
+                text: searchResult[0].message
+            }];
         }
         // console.log('---pages/db', result );
         herokuSqlClient.release();
     } catch (err) {
         console.error(err);
     }
-
-    //combine message
-    let message = [
-    {
-        type: 'text',
-        text: searchResult[0].message
-    }];
     
     return message;
 }

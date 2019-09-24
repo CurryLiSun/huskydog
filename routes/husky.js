@@ -140,7 +140,7 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
         console.log("---getProfile error",err);
     });
 
-    let message;
+    let message = null;
     let randomNum = await randomToReply().then();
 
     switch (reqMsg.type) {
@@ -185,13 +185,13 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
             if (message === null) {
                 message = await learnKeyword(spiltStr,getProfile);
             }
-            //scrap cwb
-            if (message === null) {
-                message = await getCwbImg(spiltStr,getProfile);
-            }
             //search keyword
             if (message === null) {
                 message = await searchKeyword(spiltStr,getProfile);
+            }
+            //scrap cwb
+            if (message === null) {
+                message = await getCwbImg(spiltStr,getProfile);
             }
 
             //random lucky number

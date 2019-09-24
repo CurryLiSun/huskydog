@@ -306,10 +306,12 @@ async function searchKeyword(source_str, getProfile, groupId){
 }
 
 async function learnKeyword(source_str, getProfile, groupId){
+    //check learn keyword process
     if (source_str[0] !== "學說話") {
         return null;
     }
-    if (source_str[1] !== "" || source_str[2] !== "") {
+    //check learn keyword have value
+    if (source_str[1] === "" || source_str[2] === "") {
         return null;
     }
 

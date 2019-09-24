@@ -272,7 +272,7 @@ function BotLeave(){
 }
 
 async function searchKeyword(source_str, getProfile, groupId){
-    let searchResult;
+    let searchResult = null;
     let querySql = "SELECT * FROM keyword_mapping WHERE keyword = $1";
     let querySqlValues = [source_str[0], groupId];
     console.log("---search querySqlValues",querySqlValues);

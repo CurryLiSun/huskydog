@@ -183,15 +183,15 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
             let spiltStr = reqMsg.text.split(";");
             //scrap cwb
             if (message === null) {
-                message = await getCwbImg(spiltStr,getProfile);
+                message = await getCwbImg(spiltStr, getProfile);
             }
             //learn keyword
             if (message === null) {
-                message = await learnKeyword(spiltStr,getProfile);
+                message = await learnKeyword(spiltStr, getProfile);
             }
             //search keyword
             if (message === null) {
-                message = await searchKeyword(spiltStr,getProfile);
+                message = await searchKeyword(spiltStr, getProfile);
             }
 
             //random lucky number
@@ -272,15 +272,22 @@ function BotLeave(){
 }
 
 async function searchKeyword(source_str, getProfile){
+
+    try {
+        let herokuSqlClient = await herokuSql.connect()
+        let doSqlResult = await herokuSqlClient.query("SELECT * FROM keyword_mapping WHERE keyword = $1", source_str[0]);
+        let result = doSqlResult.rows;
+        console.log('---pages/db', result );
+        herokuSqlClient.release();
+    } catch (err) {
+        console.error(err);
+    }
+
     //combine message
     let message = [
     {
         type: 'text',
-        text: getProfile.displayName+"searchKeyword"
-    },
-    {
-        type: 'text',
-        text: "這是中央氣象局的資料的啦!"
+        text: "aaa"
     }];
     
     return message;

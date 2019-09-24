@@ -44,15 +44,22 @@ router.post('/testpost', async function (req, res) {
     //reconstruct
     console.log(test) // => "This is a test!"
 
-    //postgre sql test
-    db.one("SELECT * From test")
+    let isInsert = req.body.test.split(";");
+    let insertValues = [isInsert[1], isInsert[2]];
+
+    if (isInsert[0] === "學說話" && isInsert[1] !== "" && isInsert[2] !== "") {
+        db
+        .query("INSERT INTO keyword_mapping(keyword, message) VALUES($1, $2)", insertValues)
+        .then()
+        .catch(e => console.error(e));
+    }
+
+    db
+    .query("SELECT * From keyword_mapping Where keyword = $1", isInsert[1])
     .then(function (data) {
         console.log("---DATA1:", data);
-        console.log("---DATA2:", data.message);
     })
-    .catch(function (error) {
-        console.log("ERROR:", error);
-    });
+    .catch(e => console.error(e));
 
     //標籤三種:1.衛星 2.雷達 3.雨量
     res.send(req.body);
@@ -153,7 +160,7 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
             }
         break;
 
-        default:
+        case "text":
             //以;切割字串
             let spiltStr = reqMsg.text.split(";");
             let replyImgUrl = await getCwbImg(spiltStr[0]);
@@ -197,6 +204,10 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                 text: reqMsg.text
             };
             */
+        break;
+
+        default:
+            return null;
         break;
     }
 

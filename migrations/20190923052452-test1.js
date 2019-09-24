@@ -15,7 +15,15 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.createTable('test', {
+  db.createTable('keyword_mapping', {
+    userid: {
+      type: 'string',
+      length: 100
+    },
+    groupid: {
+      type: 'string',
+      length: 100
+    },
     keyword: {
       type: 'string',
       length: 50
@@ -32,7 +40,7 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-  db.dropTable('test', callback);
+  db.dropTable('keyword_mapping', callback);
 };
 
 exports._meta = {

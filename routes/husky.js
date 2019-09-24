@@ -281,11 +281,11 @@ async function searchKeyword(source_str, getProfile, groupId){
         let doSqlResult = await herokuSqlClient.query(querySql, querySqlValues);
         let searchResult = doSqlResult.rows;
         let rowsCount = searchResult.length;
-        console.log("---search searchResult",searchResult);
-        console.log("---search rowsCount",rowsCount);
+        // console.log("---search searchResult",searchResult);
+        // console.log("---search rowsCount",rowsCount);
         //random get rows
         let randomRow = Math.floor(Math.random()*rowsCount);
-        console.log("---search randomRow",randomRow);
+        // console.log("---search randomRow",randomRow);
         if (searchResult[0] === null || searchResult[0] === undefined) {
             return null;
         }else{
@@ -293,7 +293,7 @@ async function searchKeyword(source_str, getProfile, groupId){
             message = [
             {
                 type: 'text',
-                text: searchResult[0].message
+                text: searchResult[randomRow].message
             }];
         }
         // console.log('---pages/db', result );

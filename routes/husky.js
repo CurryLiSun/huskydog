@@ -284,7 +284,7 @@ async function searchKeyword(source_str, getProfile, groupId){
         console.log("---search searchResult",searchResult);
         console.log("---search rowsCount",rowsCount);
         //random get rows
-        let randomRow = Math.floor(Math.random()*rowsCount)+1;
+        let randomRow = Math.floor(Math.random()*rowsCount);
         console.log("---search randomRow",randomRow);
         if (searchResult[0] === null || searchResult[0] === undefined) {
             return null;

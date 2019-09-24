@@ -1,11 +1,10 @@
 {
     "dev": {
-        "driver": "pg",
-        "user": "postgres",
-        "password": "123456",
-        "host": "localhost",
-        "database": "postgres",
-        "schema": "public"
+      "driver": "pg",
+      "user": "tmawuwlnambrqa",
+      "password": "baae8813144cdbcc4fbf8f2b1399447d8c2190efccca820b1fa73e47692f9dfc",
+      "host": "ec2-54-235-100-99.compute-1.amazonaws.com",
+      "database": "ddlf5nv8ig28dh"
     },
   
     "test": {
@@ -18,15 +17,22 @@
     },
   
     "prod": {
-        "driver": "pg",
-        "user": "postgres",
-        "password": "123456",
-        "host": "localhost",
-        "database": "postgres",
-        "schema": "public"
+      "driver": "pg",
+      "user": "tmawuwlnambrqa",
+      "password": "baae8813144cdbcc4fbf8f2b1399447d8c2190efccca820b1fa73e47692f9dfc",
+      "host": "ec2-54-235-100-99.compute-1.amazonaws.com",
+      "database": "ddlf5nv8ig28dh"
+    },
+
+    "pg": {
+      "driver": "pg",
+      "user": "tmawuwlnambrqa",
+      "password": "baae8813144cdbcc4fbf8f2b1399447d8c2190efccca820b1fa73e47692f9dfc",
+      "host": "ec2-54-235-100-99.compute-1.amazonaws.com",
+      "database": "ddlf5nv8ig28dh"
     },
   
-    "pg": {
+    "local_pg": {
       "driver": "pg",
       "user": "postgres",
       "password": "123456",
@@ -41,5 +47,6 @@
       "host": "localhost"
     },
   
-    "other": "postgres://uname:pw@server.com/dbname"
+    "other": "postgres://uname:pw@server.com/dbname",
+    "uri" : "postgres://tmawuwlnambrqa:baae8813144cdbcc4fbf8f2b1399447d8c2190efccca820b1fa73e47692f9dfc@ec2-54-235-100-99.compute-1.amazonaws.com:5432/ddlf5nv8ig28dh"
   }

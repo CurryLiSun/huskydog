@@ -32,6 +32,12 @@ const test = require("../public/javascripts/lineBotFunctions.js");
 //postgre sql test
 var pgp = require("pg-promise")(/*options*/);
 var db = pgp("postgres://postgres:123456@localhost:5432/postgres");
+//heroku postgre sql test
+const { Pool } = require('pg');
+const herokuSql = new Pool({
+  connectionString: "postgres://tmawuwlnambrqa:baae8813144cdbcc4fbf8f2b1399447d8c2190efccca820b1fa73e47692f9dfc@ec2-54-235-100-99.compute-1.amazonaws.com:5432/ddlf5nv8ig28dh",
+  ssl: true
+});
 
 // POST method route
 router.post('/testpost', async function (req, res) {
@@ -44,6 +50,17 @@ router.post('/testpost', async function (req, res) {
     //reconstruct
     console.log(test) // => "This is a test!"
 
+    try {
+        let herokuSqlClient = await herokuSql.connect()
+        let doSqlResult = await herokuSqlClient.query('SELECT * FROM keyword_mapping');
+        let result = doSqlResult.rows;
+        console.log('---pages/db', result );
+        herokuSqlClient.release();
+    } catch (err) {
+        console.error(err);
+    }
+
+    /*
     let isInsert = req.body.test.split(";");
     let insertValues = [isInsert[1], isInsert[2]];
 
@@ -60,6 +77,7 @@ router.post('/testpost', async function (req, res) {
         console.log("---DATA1:", data);
     })
     .catch(e => console.error(e));
+    */
 
     //標籤三種:1.衛星 2.雷達 3.雨量
     res.send(req.body);
@@ -163,8 +181,15 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
         case "text":
             //以;切割字串
             let spiltStr = reqMsg.text.split(";");
-            let replyImgUrl = await getCwbImg(spiltStr[0]);
+            //search keyword
+            //message = await searchKeyword(spiltStr);
+            //learn keyword
+            //message = await learnKeyword(spiltStr);
             
+            //scrap cwb
+            message = await getCwbImg(spiltStr);
+
+            /*
             if(replyImgUrl !== null){
                 message = [
                 {
@@ -181,7 +206,8 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
                     previewImageUrl: replyImgUrl
                 }];
             }
-
+            */
+            //random lucky number
             if (randomNum !== null) {
                 message = [
                 {
@@ -336,7 +362,7 @@ async function getCwbImg(selectPage){
     let idxStrEnd = "\',";
     let onlyRainUrl = "";
 
-    switch (selectPage) {
+    switch (selectPage[0]) {
         case "衛星":
             // customerUrl = "W/OBS_Sat.html";
             customerUrl = "https://www.cwb.gov.tw/Data/js/obs_img/Observe_sat.js";
@@ -379,7 +405,23 @@ async function getCwbImg(selectPage){
         console.log("---error",error);
     });
 
-    return resultUrl + onlyRainUrl;
+    //combine message
+    let message = [
+    {
+        type: 'text',
+        text: getProfile.displayName+"要找資料???"
+    },
+    {
+        type: 'text',
+        text: "這是中央氣象局的資料的啦!"
+    },
+    {
+        type: "image",
+        originalContentUrl: resultUrl + onlyRainUrl,
+        previewImageUrl: resultUrl + onlyRainUrl
+    }];
+
+    return message;
 }
 
 module.exports = router;

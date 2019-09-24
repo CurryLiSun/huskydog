@@ -187,11 +187,11 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
             }
             //learn keyword
             if (message === null) {
-                message = await learnKeyword(spiltStr, getProfile);
+                message = await learnKeyword(spiltStr, getProfile, reqSource.groupId);
             }
             //search keyword
             if (message === null) {
-                message = await searchKeyword(spiltStr, getProfile);
+                message = await searchKeyword(spiltStr, getProfile, reqSource.groupId);
             }
 
             //random lucky number
@@ -271,16 +271,19 @@ function BotLeave(){
     //clear db data
 }
 
-async function searchKeyword(source_str, getProfile){
-
+async function searchKeyword(source_str, getProfile, groupId){
+    let searchResult;
+    let querySql = "SELECT * FROM keyword_mapping WHERE keyword = $1";
+    let querySqlValues = [source_str[0], groupId];
+    console.log("---search querySqlValues",querySqlValues);
     try {
-        let herokuSqlClient = await herokuSql.connect()
-        let doSqlResult = await herokuSqlClient.query("SELECT * FROM keyword_mapping WHERE keyword = $1", source_str);
-        let result = doSqlResult.rows;
-        if (result[0] === null || result[0] === undefined) {
+        let herokuSqlClient = await herokuSql.connect();
+        let doSqlResult = await herokuSqlClient.query(querySql, querySqlValues);
+        searchResult = doSqlResult.rows;
+        if (searchResult[0] === null || searchResult[0] === undefined) {
             return null;
         }
-        console.log('---pages/db', result );
+        // console.log('---pages/db', result );
         herokuSqlClient.release();
     } catch (err) {
         console.error(err);
@@ -290,15 +293,29 @@ async function searchKeyword(source_str, getProfile){
     let message = [
     {
         type: 'text',
-        text: "aaa"
+        text: searchResult[0].message
     }];
     
     return message;
 }
 
-async function learnKeyword(source_str, getProfile){
+async function learnKeyword(source_str, getProfile, groupId){
     if (source_str[0] !== "學說話") {
         return null;
+    }
+
+    let querySql = "INSERT INTO keyword_mapping VALUES ('', $1, $2, $3)";
+    let querySqlValues = [groupId, source_str[1], source_str[2]];
+    console.log("---learnKeyword querySqlValues",querySqlValues);
+    try {
+        let herokuSqlClient = await herokuSql.connect();
+        let doSqlResult = await herokuSqlClient.query(querySql, querySqlValues);
+        searchResult = doSqlResult;
+        
+        console.log('---pages/db', searchResult );
+        herokuSqlClient.release();
+    } catch (err) {
+        console.error(err);
     }
 
     //combine message

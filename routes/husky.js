@@ -182,11 +182,11 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
             //以;切割字串
             let spiltStr = reqMsg.text.split(";");
             //learn keyword
-            message = await learnKeyword(spiltStr);
+            message = await learnKeyword(spiltStr,getProfile);
             //scrap cwb
-            message = await getCwbImg(spiltStr);
+            message = await getCwbImg(spiltStr,getProfile);
             //search keyword
-            message = await searchKeyword(spiltStr);
+            message = await searchKeyword(spiltStr,getProfile);
 
             //random lucky number
             if (randomNum !== null) {
@@ -265,7 +265,7 @@ function BotLeave(){
     //clear db data
 }
 
-async function searchKeyword(source_str){
+async function searchKeyword(source_str, getProfile){
     //combine message
     let message = [
     {
@@ -280,7 +280,7 @@ async function searchKeyword(source_str){
     return message;
 }
 
-async function learnKeyword(source_str){
+async function learnKeyword(source_str, getProfile){
     if (source_str[0] !== "學說話") {
         return null;
     }
@@ -367,7 +367,7 @@ async function getReslut(selectPage){
     return uploadToImgur(customerUrl);
 }
 
-async function getCwbImg(selectPage){
+async function getCwbImg(selectPage, getProfile){
     let resultUrl = "";
     let customerUrl = "";
     // define search point & split point

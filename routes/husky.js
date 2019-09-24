@@ -182,11 +182,17 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
             //以;切割字串
             let spiltStr = reqMsg.text.split(";");
             //learn keyword
-            message = await learnKeyword(spiltStr,getProfile);
+            if (message === null) {
+                message = await learnKeyword(spiltStr,getProfile);
+            }
             //scrap cwb
-            message = await getCwbImg(spiltStr,getProfile);
+            if (message === null) {
+                message = await getCwbImg(spiltStr,getProfile);
+            }
             //search keyword
-            message = await searchKeyword(spiltStr,getProfile);
+            if (message === null) {
+                message = await searchKeyword(spiltStr,getProfile);
+            }
 
             //random lucky number
             if (randomNum !== null) {

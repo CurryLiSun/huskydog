@@ -181,32 +181,13 @@ async function BotReplyMsg(res, replyToken, reqMsg, reqSource){
         case "text":
             //以;切割字串
             let spiltStr = reqMsg.text.split(";");
-            //search keyword
-            //message = await searchKeyword(spiltStr);
             //learn keyword
-            //message = await learnKeyword(spiltStr);
-            
+            message = await learnKeyword(spiltStr);
             //scrap cwb
             message = await getCwbImg(spiltStr);
+            //search keyword
+            message = await searchKeyword(spiltStr);
 
-            /*
-            if(replyImgUrl !== null){
-                message = [
-                {
-                    type: 'text',
-                    text: getProfile.displayName+"要找資料???"
-                },
-                {
-                    type: 'text',
-                    text: "這是中央氣象局的資料的啦!"
-                },
-                {
-                    type: "image",
-                    originalContentUrl: replyImgUrl,
-                    previewImageUrl: replyImgUrl
-                }];
-            }
-            */
             //random lucky number
             if (randomNum !== null) {
                 message = [
@@ -282,6 +263,40 @@ function BotJoin(res, replyToken, replySource){
 
 function BotLeave(){
     //clear db data
+}
+
+async function searchKeyword(source_str){
+    //combine message
+    let message = [
+    {
+        type: 'text',
+        text: getProfile.displayName+"searchKeyword"
+    },
+    {
+        type: 'text',
+        text: "這是中央氣象局的資料的啦!"
+    }];
+    
+    return message;
+}
+
+async function learnKeyword(source_str){
+    if (source_str[0] !== "學說話") {
+        return null;
+    }
+
+    //combine message
+    let message = [
+    {
+        type: 'text',
+        text: getProfile.displayName+"今天教我一句話"
+    },
+    {
+        type: 'text',
+        text: "如果聽到" + source_str[1] + "要回答" + source_str[2]
+    }];
+
+    return message;
 }
 
 async function randomToReply() {

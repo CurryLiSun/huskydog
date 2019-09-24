@@ -288,7 +288,7 @@ async function searchKeyword(source_str, getProfile, groupId){
             message = [
             {
                 type: 'text',
-                text: "."
+                text: searchResult[0].message
             }];
         }
         // console.log('---pages/db', result );

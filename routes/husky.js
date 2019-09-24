@@ -280,7 +280,12 @@ async function searchKeyword(source_str, getProfile, groupId){
         let herokuSqlClient = await herokuSql.connect();
         let doSqlResult = await herokuSqlClient.query(querySql, querySqlValues);
         let searchResult = doSqlResult.rows;
+        let rowsCount = searchResult.length;
         console.log("---search searchResult",searchResult);
+        console.log("---search rowsCount",rowsCount);
+        //random get rows
+        let randomRow = Math.floor(Math.random()*rowsCount)+1;
+        console.log("---search randomRow",randomRow);
         if (searchResult[0] === null || searchResult[0] === undefined) {
             return null;
         }else{

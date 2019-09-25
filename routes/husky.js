@@ -27,8 +27,6 @@ router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
 
-//reconstruct
-const test = require("../public/javascripts/lineBotFunctions.js");
 //postgre sql test
 var pgp = require("pg-promise")(/*options*/);
 var db = pgp("postgres://postgres:123456@localhost:5432/postgres");
@@ -39,26 +37,23 @@ const herokuSql = new Pool({
   ssl: true
 });
 
+//reconstruct
+const lineBotFunctions = require("../public/javascripts/lineBotFunctions.js");
+
 // POST method route
 router.post('/testpost', async function (req, res) {
     console.log("---process testpost start---");
     //replyUrl = await getReslut(req.body.test);
     let replyImgUrl = await getCwbImg(req.body.test);
+    
+    //
+    let profileTest = {
+        displayName : "abcde"
+    };
+    let replyImgUrl = await lineBotFunctions.getCwbImg(req.body.test.split(";"),profileTest);
+    
     //console.log("---replyImgUrl---",replyImgUrl);
     // console.log("testpost---",replyImgUrl);
-
-    //reconstruct
-    console.log(test) // => "This is a test!"
-
-    try {
-        let herokuSqlClient = await herokuSql.connect()
-        let doSqlResult = await herokuSqlClient.query('SELECT * FROM keyword_mapping');
-        let result = doSqlResult.rows;
-        console.log('---pages/db', result );
-        herokuSqlClient.release();
-    } catch (err) {
-        console.error(err);
-    }
 
     /*
     let isInsert = req.body.test.split(";");
@@ -80,8 +75,8 @@ router.post('/testpost', async function (req, res) {
     */
 
     //標籤三種:1.衛星 2.雷達 3.雨量
-    res.send(req.body);
-    // res.send(randomToReply());
+    // res.send(req.body);
+    res.send(replyImgUrl);
 
     console.log("---process testpost end---");
 });

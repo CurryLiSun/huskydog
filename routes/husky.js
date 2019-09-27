@@ -105,7 +105,7 @@ router.post('/', function (req, res) {
         break;
 
         case "join":
-            BotJoin(res, replyToken, reqSource);
+            lineBotFunctions.BotJoin(res, replyToken, reqSource);
         break;
         
         case "leave":
@@ -113,7 +113,7 @@ router.post('/', function (req, res) {
         break;
     
         default:
-            BotReplyMsg(res, replyToken, reqMsg, reqSource);
+            lineBotFunctions.BotReplyMsg(res, replyToken, reqMsg, reqSource);
         break;
     }
 
@@ -374,36 +374,6 @@ async function uploadToImgur(webUrl) {
     });
     // console.log("---getLink",resLink);
     return resLink;
-}
-
-async function getReslut(selectPage){
-    let customerUrl = "";
-    let selector = ".zoomHolder  > img";
-    console.log("---getResult---",selectPage);
-    //接收應讀取的項目
-    switch (selectPage) {
-        case "衛星":
-            // customerUrl = "W/OBS_Sat.html";
-            customerUrl = "https://www.cwb.gov.tw/Data/satellite/LCC_IR1_CR_1000/LCC_IR1_CR_1000.jpg";
-        break;
-        case "雷達":
-            // customerUrl="W/OBS_Radar.html";
-            customerUrl = "https://www.cwb.gov.tw/Data/radar/CV1_1000.png";
-        break;
-        case "雨量":
-            customerUrl = "P/Rainfall/Rainfall_QZJ.html";
-            selector = "[role=tabpanel] > img";
-        break;
-        default:
-            return null;
-        break;
-    }
-    
-    //let $ = await fetchData(customerUrl);
-    // siteName = $('.top > .action-post-job').text();
-    // console.log("---get back $---",$);
-    
-    return uploadToImgur(customerUrl);
 }
 
 async function getCwbImg(selectPage, getProfile){

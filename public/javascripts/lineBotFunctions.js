@@ -1,27 +1,27 @@
-// set reply message setting
+// line* set reply message setting
 const line = require('@line/bot-sdk');
-// Signature validation
+// line* Signature validation
 const crypto = require('crypto');
 const channelSecret = "6fef8cd1c18dc2db6786c887b613652f"; // Channel secret string
 const channelToken = "LJb2VigkfYE0/+WZAfxLAEwPdC9hmqvMK9jPkT7RahK5/Mc9lyxqRlGF4CHVgujG+oHIO0dExRsy7hi6E0k1pPlO0Nvi9WTjZD32j4T+k1jhiLSNEO3q0N3J0r0yEwlg8DVHGBZljYnllBglZ5gzFAdB04t89/1O/w1cDnyilFU=+oHIO0dExRsy7hi6E0k1pPlO0Nvi9WTjZD32j4T+k1iohERZWZE+en72+aeg0DixqLTHbTQQVIz7DCAzA+9u3wdB04t89/1O/w1cDnyilFU="; //Channel secret string
 
-//set line bot client
+//line* set line bot client
 const client = new line.Client({
     channelSecret: channelSecret,
     channelAccessToken: channelToken
 });
 
-//set scraping setting
+//scrap* set scraping setting
 var https = require('https');
 const axios = require('axios');
 const cheerio = require("cheerio");
 // const siteUrl = "https://remoteok.io/";
 // let siteUrl = "https://www.cwb.gov.tw/V8/C/";
 
-//postgre sql test
+//db* postgre sql test
 var pgp = require("pg-promise")(/*options*/);
 var db = pgp("postgres://postgres:123456@localhost:5432/postgres");
-//heroku postgre sql test
+//db* heroku postgre sql test
 const { Pool } = require('pg');
 const herokuSql = new Pool({
   connectionString: "postgres://tmawuwlnambrqa:baae8813144cdbcc4fbf8f2b1399447d8c2190efccca820b1fa73e47692f9dfc@ec2-54-235-100-99.compute-1.amazonaws.com:5432/ddlf5nv8ig28dh",
@@ -93,7 +93,7 @@ module.exports = {
             // console.log('---pages/db', result );
             herokuSqlClient.release();
         } catch (err) {
-            console.error(err);
+            console.error("---error",err);
         }
         
         return message;
@@ -182,7 +182,7 @@ module.exports = {
         })
         .catch((err) => {
             // error handling
-            console.log("---getProfile error",err);
+            console.log("---error",err);
         });
 
         let message = null;

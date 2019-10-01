@@ -42,7 +42,7 @@ router.post('/', function (req, res) {
         break;
 
         case "unfollow":
-
+            lineBotFunctions.UnFollowBot(res, replyToken, reqSource);
         break;
 
         case "join":

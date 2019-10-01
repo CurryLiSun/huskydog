@@ -269,6 +269,9 @@ module.exports = {
             break;
         }
 
+        this.testPushFunc(res, reqSource.userId, replyToken, message);
+
+        /*
         client.replyMessage(replyToken, message)
         .then(() => {
             //console.log("replyMessage success");
@@ -279,6 +282,7 @@ module.exports = {
             //console.log(err);
             res.send(err);
         }); 
+        */
     },
     getCwbImg: async function (selectPage, getProfile) {
         let resultUrl = "";
@@ -352,5 +356,22 @@ module.exports = {
         }];
     
         return message;
-    }
+    },
+    FollowBot: function (res, replyToken, replySource) {
+        console.log("---Follow bot replyToken",replyToken);
+
+        res.sendStatus(200);
+    },
+    testPushFunc: function (res, userId, replyToken, message) {
+        client.pushMessage(userId, message)
+        .then(() => {
+            //console.log("pushMessage success");
+            res.sendStatus(200);
+        })
+        .catch((err) => {
+        // error handling
+            //console.log(err);
+            res.send(err);
+        }); 
+    },
 };

@@ -34,11 +34,11 @@ router.post('/', function (req, res) {
     console.log("---reqSource---",reqSource);
     //console.log("---reqType---",reqType);
     console.log("---reqMsg---",reqMsg);
-    // console.log(replyToken);
+    // console.log("---res",res);
 
     switch (reqType) {
         case "follow":
-
+            lineBotFunctions.FollowBot(res, replyToken, reqSource);
         break;
 
         case "unfollow":

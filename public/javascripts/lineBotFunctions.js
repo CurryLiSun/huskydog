@@ -18,14 +18,22 @@ const cheerio = require("cheerio");
 // const siteUrl = "https://remoteok.io/";
 // let siteUrl = "https://www.cwb.gov.tw/V8/C/";
 
-//db* postgre sql test
+//db* postgre sql
 var pgp = require("pg-promise")(/*options*/);
 var db = pgp("postgres://postgres:123456@localhost:5432/postgres");
-//db* heroku postgre sql test
+//db* heroku postgre sql
 const { Pool } = require('pg');
 const herokuSql = new Pool({
-  connectionString: "postgres://tmawuwlnambrqa:baae8813144cdbcc4fbf8f2b1399447d8c2190efccca820b1fa73e47692f9dfc@ec2-54-235-100-99.compute-1.amazonaws.com:5432/ddlf5nv8ig28dh",
-  ssl: true
+    connectionString: "postgres://tmawuwlnambrqa:baae8813144cdbcc4fbf8f2b1399447d8c2190efccca820b1fa73e47692f9dfc@ec2-54-235-100-99.compute-1.amazonaws.com:5432/ddlf5nv8ig28dh",
+    ssl: true
+});
+//db* local postgre sql
+const localSql = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'postgres',
+    password: '123456',
+    port: 5432,
 });
 
 module.exports = {
@@ -53,17 +61,125 @@ module.exports = {
 
         client.pushMessage(replySource.groupId, message)
         .then(() => {
-            //console.log("pushMessage success");
-            res.sendStatus(200);
+            console.log("---pushMessage success");
         })
         .catch((err) => {
         // error handling
-            //console.log(err);
-            res.send(err);
+            console.log("---pushMessage error",err);
         }); 
     },
     BotLeave: function () {
         
+    },
+    BotReplyMsg: async function (res, replyToken, reqMsg, reqSource) {
+        //get member info
+        let getProfile = await client.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
+        .then((profile) => {
+            // console.log(profile.displayName);
+            // console.log(profile.userId);
+            // console.log(profile.pictureUrl);
+            // console.log(profile.statusMessage);
+            return profile;
+        })
+        .catch((err) => {
+            // error handling
+            console.log("---error",err);
+        });
+
+        let message = null;
+        let randomNum = await this.randomToReply().then();
+
+        switch (reqMsg.type) {
+            case "sticker":
+                if (randomNum !== null) {
+                    message = [
+                    {
+                        type: 'text',
+                        text: getProfile.displayName+"是個幸運的渾蛋"
+                    },
+                    {
+                        type: 'text',
+                        text: "以千分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
+                    },
+                    {
+                        id: reqMsg.id,
+                        type: "sticker",
+                        stickerId: "51626520",
+                        packageId: "11538"
+                    }]
+                }
+            break;
+            case "image":
+                if (randomNum !== null) {
+                    message = [
+                    {
+                        type: 'text',
+                        text: getProfile.displayName+"是個幸運的渾蛋"
+                    },
+                    {
+                        type: 'text',
+                        text: "以千分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
+                    }
+                ];
+                }
+            break;
+
+            case "text":
+                //以;切割字串
+                let spiltStr = reqMsg.text.split(";");
+                //scrap cwb
+                if (message === null) {
+                    message = await this.getCwbImg(spiltStr, getProfile);
+                }
+                //learn keyword
+                if (message === null) {
+                    message = await this.learnKeyword(spiltStr, getProfile, reqSource.groupId);
+                }
+                //search keyword
+                if (message === null) {
+                    message = await this.searchKeyword(spiltStr, getProfile, reqSource.groupId);
+                }
+
+                //random lucky number
+                if (randomNum !== null) {
+                    message = [
+                    {
+                        type: 'text',
+                        text: getProfile.displayName+"是個幸運的渾蛋"
+                    },
+                    {
+                        type: 'text',
+                        text: "以千分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
+                    },
+                    {
+                        type: 'text',
+                        text: reqMsg.text
+                    }];
+                }
+
+                /*
+                message = {
+                    type: 'text',
+                    text: reqMsg.text
+                };
+                */
+            break;
+
+            default:
+                return null;
+            break;
+        }
+
+        this.testPushFunc(res, reqSource.userId, replyToken, message);
+
+        client.replyMessage(replyToken, message)
+        .then(() => {
+            console.log("---replyMessage success");
+        })
+        .catch((err) => {
+        // error handling
+            console.log("---replyMessage error",err);
+        });
     },
     searchKeyword: async function(source_str, getProfile, groupId){
         let message = null;
@@ -170,118 +286,6 @@ module.exports = {
         // console.log("---getLink",resLink);
         return resLink;
     },
-    BotReplyMsg: async function (res, replyToken, reqMsg, reqSource) {
-        //get member info
-        let getProfile = await client.getGroupMemberProfile(reqSource.groupId, reqSource.userId)
-        .then((profile) => {
-            // console.log(profile.displayName);
-            // console.log(profile.userId);
-            // console.log(profile.pictureUrl);
-            // console.log(profile.statusMessage);
-            return profile;
-        })
-        .catch((err) => {
-            // error handling
-            console.log("---error",err);
-        });
-
-        let message = null;
-        let randomNum = await this.randomToReply().then();
-
-        switch (reqMsg.type) {
-            case "sticker":
-                if (randomNum !== null) {
-                    message = [
-                    {
-                        type: 'text',
-                        text: getProfile.displayName+"是個幸運的渾蛋"
-                    },
-                    {
-                        type: 'text',
-                        text: "以千分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
-                    },
-                    {
-                        id: reqMsg.id,
-                        type: "sticker",
-                        stickerId: "51626520",
-                        packageId: "11538"
-                    }]
-                }
-            break;
-            case "image":
-                if (randomNum !== null) {
-                    message = [
-                    {
-                        type: 'text',
-                        text: getProfile.displayName+"是個幸運的渾蛋"
-                    },
-                    {
-                        type: 'text',
-                        text: "以千分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
-                    }
-                ];
-                }
-            break;
-
-            case "text":
-                //以;切割字串
-                let spiltStr = reqMsg.text.split(";");
-                //scrap cwb
-                if (message === null) {
-                    message = await this.getCwbImg(spiltStr, getProfile);
-                }
-                //learn keyword
-                if (message === null) {
-                    message = await this.learnKeyword(spiltStr, getProfile, reqSource.groupId);
-                }
-                //search keyword
-                if (message === null) {
-                    message = await this.searchKeyword(spiltStr, getProfile, reqSource.groupId);
-                }
-
-                //random lucky number
-                if (randomNum !== null) {
-                    message = [
-                    {
-                        type: 'text',
-                        text: getProfile.displayName+"是個幸運的渾蛋"
-                    },
-                    {
-                        type: 'text',
-                        text: "以千分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
-                    },
-                    {
-                        type: 'text',
-                        text: reqMsg.text
-                    }];
-                }
-
-                /*
-                message = {
-                    type: 'text',
-                    text: reqMsg.text
-                };
-                */
-            break;
-
-            default:
-                return null;
-            break;
-        }
-
-        this.testPushFunc(res, reqSource.userId, replyToken, message);
-
-        client.replyMessage(replyToken, message)
-        .then(() => {
-            //console.log("replyMessage success");
-            res.sendStatus(200);
-        })
-        .catch((err) => {
-        // error handling
-            //console.log(err);
-            res.send(err);
-        });
-    },
     getCwbImg: async function (selectPage, getProfile) {
         let resultUrl = "";
         let customerUrl = "";
@@ -320,7 +324,7 @@ module.exports = {
                 return null;
             break;
         }
-    
+        // split string and find the picture url
         let getLink = await axios({
             method: 'get',
             url: customerUrl,
@@ -329,12 +333,12 @@ module.exports = {
             // console.log("---axios2",typeof(resLink.data));
             // console.log(CircularJSON.stringify(resLink));
             // console.log("---axios1",resLink.data);
-            let a = resLink[idxSplitPoint].indexOf(idxStrHead);
-            let b = resLink[idxSplitPoint].indexOf(idxStrEnd);
+            let urlHead = resLink[idxSplitPoint].indexOf(idxStrHead);
+            let urlEnd = resLink[idxSplitPoint].indexOf(idxStrEnd);
             
-            resultUrl = resultUrl + resLink[idxSplitPoint].substring(a+2,b);
+            resultUrl = resultUrl + resLink[idxSplitPoint].substring(urlHead+2,urlEnd);
         }).catch(function(error) {
-            console.log("---error",error);
+            console.log("---getLink error",error);
         });
     
         //combine message
@@ -358,23 +362,19 @@ module.exports = {
     FollowBot: function (res, replyToken, replySource) {
         console.log("---Follow bot running");
 
-        res.sendStatus(200);
     },
     UnFollowBot: function (res, replyToken, replySource) {
         console.log("---Unfollow bot running");
 
-        res.sendStatus(200);
     },
     testPushFunc: function (res, userId, replyToken, message) {
         client.pushMessage(userId, message)
         .then(() => {
-            console.log("pushMessage success");
-            // res.sendStatus(200);
+            console.log("---pushMessage success");
         })
         .catch((err) => {
         // error handling
-            console.log(err);
-            // res.send(err);
+            console.log("---pushMessage error", err);
         }); 
     },
 };

@@ -11,7 +11,7 @@ var huskyRouter = require('./routes/husky');
 
 //test code
 // const env = process.env.NODE_ENV || 'development';
-// console.log("---test config",process);
+console.log("---test config",process.env.NODE_ENV);
 
 var app = express();
 

@@ -33,6 +33,7 @@ models.sequelize.sync()
 }, function (err) { 
     console.log('---An error occurred', err);
 });
+models.sequelize.drop();
 
 // POST method route
 router.post('/testpost', async function (req, res) {

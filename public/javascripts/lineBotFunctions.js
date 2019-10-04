@@ -169,6 +169,10 @@ module.exports = {
                 return null;
             break;
         }
+        //check have message
+        if (message === null) {
+            return;
+        }
 
         this.testPushFunc(res, reqSource.userId, replyToken, message);
 

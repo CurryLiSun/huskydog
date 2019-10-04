@@ -9,6 +9,10 @@ var usersRouter = require('./routes/users');
 // new define by curry
 var huskyRouter = require('./routes/husky');
 
+//test code
+// const env = process.env.NODE_ENV || 'development';
+// console.log("---test config",process);
+
 var app = express();
 
 // view engine setup
@@ -25,6 +29,15 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 // new define by curry
 app.use('/husky', huskyRouter);
+
+//db* sequelize set & sync
+var models = require("./models");
+models.sequelize.sync()
+.then(function(err) {
+    console.log('---db* sequelize do sync!');
+}, function (err) { 
+    console.log('---db* An error occurred', err);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

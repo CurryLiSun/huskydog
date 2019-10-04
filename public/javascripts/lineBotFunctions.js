@@ -36,6 +36,9 @@ const localSql = new Pool({
     port: 5432,
 });
 
+//db* sequelize
+var models = require('../../models');
+
 module.exports = {
     testCallFunc: function () {
         console.log("---testCallFunc");
@@ -47,7 +50,7 @@ module.exports = {
             text: "汪汪汪汪汪汪汪!! \n(真開心又可以對一群人說話了)"
         };
 
-        //get group user id ! but only for VIP
+        //get group users id ! but only for VIP
         /*
         client.getGroupMemberIds(replySource.groupId)
         .then((ids) => {
@@ -125,7 +128,7 @@ module.exports = {
             break;
 
             case "text":
-                //以;切割字串
+                //use ; split the string
                 let spiltStr = reqMsg.text.split(";");
                 //scrap cwb
                 if (message === null) {
@@ -169,7 +172,7 @@ module.exports = {
                 return null;
             break;
         }
-        //check have message
+        //check message content is null?
         if (message === null) {
             return;
         }

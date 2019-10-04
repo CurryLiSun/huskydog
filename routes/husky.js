@@ -9,31 +9,6 @@ router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
 
-//db* sequelize test
-/*
-var Sequelize = require('sequelize')
-    , sequelize = new Sequelize('postgres', 'postgres', '123456', {
-        dialect: "postgres", // or 'sqlite', 'postgres', 'mariadb'
-        port:    5432, // or 5432 (for postgres)
-    });
-
-sequelize
-.sync({ force: true })
-.then(function(err) {
-    console.log('It worked!');
-}, function (err) { 
-    console.log('An error occurred while creating the table:', err);
-});
-*/
-
-var models = require('../models');
-models.sequelize.sync()
-.then(function(err) {
-    console.log('---It worked!');
-}, function (err) { 
-    console.log('---An error occurred', err);
-});
-
 // POST method route
 router.post('/testpost', async function (req, res) {
     console.log("---process testpost start---");

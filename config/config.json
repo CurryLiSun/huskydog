@@ -5,7 +5,8 @@
     "database": "postgres",
     "host": "127.0.0.1",
     "dialect": "postgres",
-    "operatorsAliases": false
+    "operatorsAliases": false,
+    "logging": true
   },
   "test": {
     "username": "root",
@@ -21,6 +22,7 @@
     "database": "ddlf5nv8ig28dh",
     "host": "ec2-54-235-100-99.compute-1.amazonaws.com",
     "dialect": "postgres",
-    "operatorsAliases": false
+    "operatorsAliases": false,
+    "logging": false
   }
 }

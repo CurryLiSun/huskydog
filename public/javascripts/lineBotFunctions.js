@@ -366,7 +366,7 @@ module.exports = {
     
         return message;
     },
-    FollowBot: function (res, replyToken, replySource) {
+    FollowBot: async function (res, replyToken, replySource) {
         console.log("---Follow bot running");
         let hasProfile = false;
         let client_userId = replySource.userId;
@@ -392,7 +392,7 @@ module.exports = {
             });
         }
     },
-    UnFollowBot: function (res, replyToken, replySource) {
+    UnFollowBot: async function (res, replyToken, replySource) {
         console.log("---Unfollow bot running");
         let client_userId = replySource.userId;
         models.BotUsers.destroy({

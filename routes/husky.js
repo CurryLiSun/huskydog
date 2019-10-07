@@ -9,12 +9,52 @@ router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
 
+//db* sequelize test
+var models = require("../models");
+
 // POST method route
 router.post('/testpost', async function (req, res) {
     console.log("---process testpost start---");
     //replyUrl = await getReslut(req.body.test);
     // let replyImgUrl = await getCwbImg(req.body.test);
-    
+    // console.log("---req data",req.body.test);
+    let hasProfile = false;
+    let client_userId = req.body.test;
+
+    await models.BotUsers.findAll({
+        where: {
+            userId: client_userId
+        }
+    }).then(function(users) {
+        // console.log("---users",users);
+        if (users[0]) {
+            hasProfile = true;
+        }
+        
+    });
+
+    if (!hasProfile) {
+        models.BotUsers.create({
+            userId: client_userId, userAuth: 0, enable: false
+        }).then(res => {
+            console.log("---insert data", res);
+        }).catch(err => {
+            console.log("---err", err);
+        });
+    }
+
+    if (hasProfile) {
+        models.BotUsers.destroy({
+            where: {
+                userId: client_userId
+            }
+        }).then(() => {
+            console.log("Done");
+        }).catch(err => {
+            console.log("---err", err);
+        });
+    }
+
     //標籤三種:1.衛星 2.雷達 3.雨量
     res.send(req.body);
     // res.send(replyImgUrl);

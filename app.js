@@ -11,7 +11,7 @@ var huskyRouter = require('./routes/husky');
 
 //test code
 // const env = process.env.NODE_ENV || 'development';
-console.log("---test config",process.env.NODE_ENV);
+// console.log("---test config",process.env.NODE_ENV);
 
 var app = express();
 
@@ -34,9 +34,9 @@ app.use('/husky', huskyRouter);
 var models = require("./models");
 models.sequelize.sync()
 .then(function(err) {
-    console.log('---db* sequelize do sync!');
+  console.log('---db* sequelize do sync!');
 }, function (err) { 
-    console.log('---db* An error occurred', err);
+  console.log('---db* An error occurred', err);
 });
 
 // catch 404 and forward to error handler

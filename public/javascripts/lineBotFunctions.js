@@ -368,11 +368,42 @@ module.exports = {
     },
     FollowBot: function (res, replyToken, replySource) {
         console.log("---Follow bot running");
+        let hasProfile = false;
+        let client_userId = replySource.userId;
 
+        await models.BotUsers.findAll({
+            where: {
+                userId: client_userId
+            }
+        }).then(function(users) {
+            // console.log("---users",users);
+            if (users[0]) {
+                hasProfile = true;
+            }
+        });
+
+        if (!hasProfile) {
+            models.BotUsers.create({
+                userId: client_userId, userAuth: 0, enable: false
+            }).then(res => {
+                console.log("---insert data", res);
+            }).catch(err => {
+                console.log("---err", err);
+            });
+        }
     },
     UnFollowBot: function (res, replyToken, replySource) {
         console.log("---Unfollow bot running");
-
+        let client_userId = replySource.userId;
+        models.BotUsers.destroy({
+            where: {
+                userId: client_userId
+            }
+        }).then(() => {
+            console.log("Done");
+        }).catch(err => {
+            console.log("---err", err);
+        });
     },
     testPushFunc: function (res, userId, replyToken, message) {
         client.pushMessage(userId, message)

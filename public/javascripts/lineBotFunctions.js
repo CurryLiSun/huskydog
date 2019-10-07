@@ -386,7 +386,8 @@ module.exports = {
             models.BotUsers.create({
                 userId: client_userId, userAuth: 0, enable: false
             }).then(res => {
-                console.log("---insert data", res);
+                // console.log("---insert data", res);
+                console.log("---insert done");
             }).catch(err => {
                 console.log("---err", err);
             });
@@ -400,7 +401,7 @@ module.exports = {
                 userId: client_userId
             }
         }).then(() => {
-            console.log("Done");
+            console.log("---delete done");
         }).catch(err => {
             console.log("---err", err);
         });

@@ -295,8 +295,8 @@ module.exports = {
         return message;
     },
     randomToReply: async function() {
-        let a = Math.floor(Math.random()*100)+1;
-        let b = Math.floor(Math.random()*10)+1;
+        let a = Math.floor(Math.random()*1000)+1;
+        let b = Math.floor(Math.random()*1000)+1;
         console.log("---a",a);
         console.log("---b",b);
         if (a === b) {

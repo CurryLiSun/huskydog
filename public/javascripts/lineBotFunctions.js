@@ -91,6 +91,8 @@ module.exports = {
 
         let message = null;
         let randomNum = await this.randomToReply().then();
+        //remove space in string
+        reqMsg.text = reqMsg.text.trim();
 
         switch (reqMsg.type) {
             case "sticker":

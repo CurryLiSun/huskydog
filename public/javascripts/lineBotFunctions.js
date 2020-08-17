@@ -391,15 +391,17 @@ module.exports = {
             console.log("---getLink error",error);
         });
     
-        if (getProfile.displayName === undefined) {
-            getProfile.displayName = "Ya Yu"
-        }
-
         //combine message
         let message = [
+        /*
         {
             type: 'text',
-            text: getProfile.displayName+"你的中央氣象局的資料來ler"
+            text: getProfile.displayName+"的中央氣象局的資料來ler"
+        },
+        */
+        {
+            type: 'text',
+            text: "你要的中央氣象局的資料來ler"
         },
         {
             type: "image",

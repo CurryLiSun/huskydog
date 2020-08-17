@@ -96,6 +96,7 @@ module.exports = {
 
         switch (reqMsg.type) {
             case "sticker":
+                /*
                 if (randomNum !== null) {
                     message = [
                     {
@@ -113,20 +114,23 @@ module.exports = {
                         packageId: "11538"
                     }]
                 }
+                */
             break;
             case "image":
+                /*
                 if (randomNum !== null) {
                     message = [
-                    {
-                        type: 'text',
-                        text: getProfile.displayName+"是個幸運的渾蛋"
-                    },
-                    {
-                        type: 'text',
-                        text: "以千分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
-                    }
-                ];
+                        {
+                            type: 'text',
+                            text: getProfile.displayName+"是個幸運的渾蛋"
+                        },
+                        {
+                            type: 'text',
+                            text: "以千分之一的機率抽中\'" + randomNum + "\'這個幸運數字"
+                        }
+                    ];
                 }
+                */
             break;
 
             case "text":
@@ -146,6 +150,7 @@ module.exports = {
                 }
 
                 //random lucky number
+                /*
                 if (randomNum !== null) {
                     message = [
                     {
@@ -161,7 +166,7 @@ module.exports = {
                         text: reqMsg.text
                     }];
                 }
-
+                */
                 /*
                 message = {
                     type: 'text',
@@ -179,7 +184,7 @@ module.exports = {
             return;
         }
 
-        this.testPushFunc(res, reqSource.userId, replyToken, message);
+        //this.testPushFunc(res, reqSource.userId, replyToken, message);
 
         client.replyMessage(replyToken, message)
         .then(() => {

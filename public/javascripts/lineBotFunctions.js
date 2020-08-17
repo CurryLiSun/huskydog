@@ -391,22 +391,16 @@ module.exports = {
             console.log("---getLink error",error);
         });
     
-        console.log("---test",getProfile);
-        // if (getProfile.displayName === undefined) {
-        //     getProfile.displayName = "Your";
-        // }
+        if (getProfile === undefined) {
+            getProfile={};
+            getProfile.displayName = "";
+        }
 
         //combine message
         let message = [
-        /*
         {
             type: 'text',
             text: getProfile.displayName+"的中央氣象局的資料來ler"
-        },
-        */
-        {
-            type: 'text',
-            text: "你要的中央氣象局的資料來ler"
         },
         {
             type: "image",

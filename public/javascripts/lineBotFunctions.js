@@ -391,6 +391,10 @@ module.exports = {
             console.log("---getLink error",error);
         });
     
+        if (getProfile.displayName === undefined) {
+            getProfile.displayName = "Ya Yu"
+        }
+
         //combine message
         let message = [
         {

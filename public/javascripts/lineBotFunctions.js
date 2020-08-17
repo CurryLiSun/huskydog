@@ -400,7 +400,7 @@ module.exports = {
         let message = [
         {
             type: 'text',
-            text: getProfile.displayName+"的中央氣象局的資料來ler"
+            text: getProfile.displayName+",中央氣象局的資料來ler"
         },
         {
             type: "image",

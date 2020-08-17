@@ -395,11 +395,7 @@ module.exports = {
         let message = [
         {
             type: 'text',
-            text: getProfile.displayName+"要找資料???"
-        },
-        {
-            type: 'text',
-            text: "這是中央氣象局的資料的啦!"
+            text: getProfile.displayName+"你的中央氣象局的資料來ler"
         },
         {
             type: "image",

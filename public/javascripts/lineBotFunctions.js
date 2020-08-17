@@ -391,6 +391,11 @@ module.exports = {
             console.log("---getLink error",error);
         });
     
+        console.log("---test",getProfile);
+        // if (getProfile.displayName === undefined) {
+        //     getProfile.displayName = "Your";
+        // }
+
         //combine message
         let message = [
         /*

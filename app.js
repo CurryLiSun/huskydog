@@ -31,13 +31,13 @@ app.use('/users', usersRouter);
 app.use('/husky', huskyRouter);
 
 //db* sequelize set & sync
-var models = require("./models");
-models.sequelize.sync()
-.then(function(err) {
-  console.log('---db* sequelize do sync!');
-}, function (err) { 
-  console.log('---db* An error occurred', err);
-});
+// var models = require("./models");
+// models.sequelize.sync()
+// .then(function(err) {
+//   console.log('---db* sequelize do sync!');
+// }, function (err) { 
+//   console.log('---db* An error occurred', err);
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -18,26 +18,28 @@ const cheerio = require("cheerio");
 // const siteUrl = "https://remoteok.io/";
 // let siteUrl = "https://www.cwb.gov.tw/V8/C/";
 
+
 //db* postgre sql
-var pgp = require("pg-promise")(/*options*/);
-var db = pgp("postgres://postgres:123456@localhost:5432/postgres");
+// var pgp = require("pg-promise")(/*options*/);
+// var db = pgp("postgres://postgres:123456@localhost:5432/postgres");
 //db* heroku postgre sql
-const { Pool } = require('pg');
-const herokuSql = new Pool({
-    connectionString: "postgres://tmawuwlnambrqa:baae8813144cdbcc4fbf8f2b1399447d8c2190efccca820b1fa73e47692f9dfc@ec2-54-235-100-99.compute-1.amazonaws.com:5432/ddlf5nv8ig28dh",
-    ssl: true
-});
+// const { Pool } = require('pg');
+// const herokuSql = new Pool({
+//     connectionString: "postgres://tmawuwlnambrqa:baae8813144cdbcc4fbf8f2b1399447d8c2190efccca820b1fa73e47692f9dfc@ec2-54-235-100-99.compute-1.amazonaws.com:5432/ddlf5nv8ig28dh",
+//     ssl: true
+// });
 //db* local postgre sql
-const localSql = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'postgres',
-    password: '123456',
-    port: 5432,
-});
+// const localSql = new Pool({
+//     user: 'postgres',
+//     host: 'localhost',
+//     database: 'postgres',
+//     password: '123456',
+//     port: 5432,
+// });
 
 //db* sequelize
-var models = require('../../models');
+// var models = require('../../models');
+
 
 module.exports = {
     testCallFunc: function () {
@@ -142,11 +144,11 @@ module.exports = {
                 }
                 //learn keyword
                 if (message === null) {
-                    message = await this.learnKeyword(spiltStr, getProfile, reqSource.groupId);
+                    // message = await this.learnKeyword(spiltStr, getProfile, reqSource.groupId);
                 }
                 //search keyword
                 if (message === null) {
-                    message = await this.searchKeyword(spiltStr, getProfile, reqSource.groupId);
+                    // message = await this.searchKeyword(spiltStr, getProfile, reqSource.groupId);
                 }
 
                 //random lucky number
@@ -201,23 +203,24 @@ module.exports = {
         let querySqlValues = [source_str[0]];
         // console.log("---search querySqlValues",querySqlValues);
         try {
-            let herokuSqlClient = await herokuSql.connect();
-            let doSqlResult = await herokuSqlClient.query(querySql, querySqlValues);
-            let searchResult = doSqlResult.rows;
-            let rowsCount = searchResult.length;
+            // let herokuSqlClient = await herokuSql.connect();
+            // let doSqlResult = await herokuSqlClient.query(querySql, querySqlValues);
+            // let searchResult = doSqlResult.rows;
+            // let rowsCount = searchResult.length;
             // console.log("---search searchResult",searchResult);
             // console.log("---search rowsCount",rowsCount);
             //random get rows
             let randomRow = Math.floor(Math.random()*rowsCount);
             // console.log("---search randomRow",randomRow);
-            if (searchResult[0] === null || searchResult[0] === undefined) {
+            // searchResult[0] === null || searchResult[0] === undefined
+            if (true) {
                 return null;
             }else{
                 // reply searched message
                 message = [
                 {
                     type: 'text',
-                    text: searchResult[randomRow].message
+                    // text: searchResult[randomRow].message
                 },
                 {
                     type: "template",
@@ -257,7 +260,7 @@ module.exports = {
                 ];
             }
             // console.log('---pages/db', result );
-            herokuSqlClient.release();
+            // herokuSqlClient.release();
         } catch (err) {
             console.error("---error",err);
         }
@@ -278,12 +281,12 @@ module.exports = {
         let querySqlValues = [groupId, source_str[1], source_str[2]];
         console.log("---learnKeyword querySqlValues",querySqlValues);
         try {
-            let herokuSqlClient = await herokuSql.connect();
-            let doSqlResult = await herokuSqlClient.query(querySql, querySqlValues);
-            searchResult = doSqlResult;
+            // let herokuSqlClient = await herokuSql.connect();
+            // let doSqlResult = await herokuSqlClient.query(querySql, querySqlValues);
+            // searchResult = doSqlResult;
             
-            console.log('---pages/db', searchResult );
-            herokuSqlClient.release();
+            // console.log('---pages/db', searchResult );
+            // herokuSqlClient.release();
         } catch (err) {
             console.error(err);
         }
